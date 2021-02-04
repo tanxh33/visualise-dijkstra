@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <link rel="stylesheet" href="./css/style.css" />
+  <title>Dijkstra's Shortest Path Algorithm</title>
+</head>
+<body>
+  <nav class="blue-grey">
+    <div class="nav-wrapper blue-grey">
+      <!-- <a href="#" class="brand-logo right">Logo</a> -->
+      <ul id="nav-drawing" class="black-text">
+        <li>
+          <!-- Add Node -->
+          <a
+            id="add-node-btn"
+            class="waves-effect btn blue tooltipped"
+            data-position="bottom"
+            data-tooltip="Add Node"
+          >
+            <i class="material-icons left">add_circle_outline</i>
+            <!-- <span class="ml-1 hide-md">Add Node</span> -->
+          </a>
+        </li>
+        <li>
+          <!-- Add Edge -->
+          <a
+            id="add-edge-btn"
+            class="waves-effect btn blue tooltipped"
+            data-position="bottom"
+            data-tooltip="Add Edge"
+          >
+            <i class="material-icons left">timeline</i>
+            <!-- <span class="ml-1 hide-md">Add Edge</span> -->
+          </a>
+        </li>
+        <li>
+          <!-- Delete Object -->
+          <a
+            id="delete-btn"
+            class="waves-effect btn blue tooltipped"
+            data-position="bottom"
+            data-tooltip="Delete Object"
+          >
+            <i class="material-icons left">delete</i>
+            <!-- <span class="ml-1 hide-md">Delete Object</span> -->
+          </a>
+        </li>
+      </ul>
+
+      <ul id="nav-runtime" class="black-text">
+        <li>
+          <!-- Run -->
+          <a
+            id="run-btn"
+            class="waves-effect btn cyan tooltipped"
+            data-position="bottom"
+            data-tooltip="Run Djikstra's algorithm"
+          >
+            <i class="material-icons left">play_arrow</i>
+            <!-- <span class="ml-1 hide-md">Run</span> -->
+          </a>
+        </li>
+        <li>
+          <!-- Prev Step -->
+          <a
+            id="prev-btn"
+            class="waves-effect btn cyan tooltipped"
+            data-position="bottom"
+            data-tooltip="Go back to the previous step"
+          >
+            <i class="material-icons left">arrow_back</i>
+            <!-- <span class="ml-1 hide-md">Step Back</span> -->
+          </a>
+        </li>
+        <li>
+          <!-- Next Step -->
+          <a
+            id="next-btn"
+            class="waves-effect btn cyan tooltipped"
+            data-position="bottom"
+            data-tooltip="Run algorithm to the next step"
+          >
+            <i class="material-icons left">arrow_forward</i>
+            <!-- <span class="ml-1 hide-md">Step Forward</span> -->
+          </a>
+        </li>
+        <li>
+          <!-- Skip to End -->
+          <a
+            id="skip-btn"
+            class="waves-effect btn cyan tooltipped"
+            data-position="bottom"
+            data-tooltip="Skip to the end"
+          >
+            <i class="material-icons left">skip_next</i>
+            <!-- <span class="ml-1 hide-md">Skip to End</span> -->
+          </a>
+        </li>
+        <li>
+          <!-- Stop running -->
+          <a
+            id="stop-btn"
+            class="waves-effect btn cyan tooltipped"
+            data-position="bottom"
+            data-tooltip="End running mode"
+          >
+            <i class="material-icons left">stop</i>
+            <!-- <span class="ml-1 hide-md">Skip to End</span> -->
+          </a>
+        </li>
+      </ul>
+
+      <ul id="nav-misc" class="right black-text">
+        <li>
+          <!-- Reset Graph -->
+          <a
+            id="refresh-btn"
+            class="waves-effect btn tooltipped"
+            data-position="bottom"
+            data-tooltip="Clear the graph"
+          >
+            <i class="material-icons left">autorenew</i>
+            <!-- <span class="ml-1 hide-md">Refresh</span> -->
+          </a>
+        </li>
+        <li>
+          <!-- Load Example -->
+          <a
+            id="load-ex-btn"
+            class="waves-effect btn tooltipped" 
+            data-position="bottom"
+            data-tooltip="Load Example Graph"
+          >
+          <i class="material-icons left">extension</i>
+          </a>
+        </li>
+        <!-- <li>
+          <a
+            id="menu-btn"
+            class="waves-effect btn tooltipped"
+            data-position="bottom"
+            data-tooltip="More"
+          >
+            <i class="material-icons left">menu</i>
+          </a>
+        </li> -->
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Modal Structure -->
+  <div id="add-node-modal" class="modal">
+    <div class="modal-content">
+      <h4>Add Node</h4>
+        <div class="input-field">
+          <input id="add-node-label" type="text">
+          <label for="add-node-label">Node label</label>
+          <span class="helper-text">Tip: Try to use shorter labels</span>
+        </div>
+    </div>
+    <div class="modal-footer">
+      <!-- <a class="modal-close btn-flat waves-effect waves-red">Cancel</a> -->
+      <a class="btn waves-effect waves-green blue" id="add-node-submit-btn">Add Node</a>
+    </div>
+  </div>
+
+  <div id="add-edge-modal" class="modal">
+    <div class="modal-content">
+      <h4>Add Edge</h4>
+      <div class="input-field">
+        <input id="add-edge-weight" class="validate" type="number" value="1" min="1" />
+        <label for="add-edge-weight">Edge weight</label>
+        <span class="helper-text" data-error="Weight should be a postiive number"></span>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <!-- <a class="modal-close btn-flat waves-effect waves-red">Cancel</a> -->
+      <a class="btn waves-effect waves-green blue" id="add-edge-submit-btn">Add Edge</a>
+    </div>
+  </div>
+
+  <div id="run-algo-modal" class="modal">
+    <div class="modal-content">
+      <h4>Djiksta's Algorithm</h4>
+      <div class="input-field">
+        <select id="algo-start">
+          <option value="" disabled selected>Choose your option</option>
+        </select>
+        <!-- <input id="algo-start" type="text"> -->
+        <label for="algo-start">Starting node</label>
+        <!-- <span class="helper-text show-on-error">Node does not exist</span> -->
+      </div>
+      <div class="input-field">
+        <select id="algo-end">
+          <option value="" disabled selected>Choose your option</option>
+        </select>
+        <!-- <input id="algo-end" type="text"> -->
+        <label for="algo-end">Ending node</label>
+        <!-- <span class="helper-text show-on-error">Node does not exist</span> -->
+      </div>
+    <span class="helper-text hidden">[ ! ] Start and end points cannot be the same!</span>
+  </div>
+    <div class="modal-footer">
+      <!-- <a class="modal-close btn-flat waves-effect waves-red">Cancel</a> -->
+      <a class="btn waves-effect waves-green blue" id="run-start-btn">Run Algorithm</a>
+    </div>
+  </div>
+
+  <!-- SVG Canvas -->
+  <div id="outer-container">
+    <div id="canvas-container">
+      <svg id="canvas" viewBox="0 0 850 600"></svg>
+      <div id="algo-output-content"></div>
+    </div>
+
+
+    <div id="table-container">
+      <table id="graph-table" class="graph-table highlight">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Node</th>
+            <th>Cost from starting node</th>
+            <th>Node check priority</th>
+            <th>Previously visited from</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <!-- <script src="https://unpkg.com/konva@7.0.3/konva.min.js"></script> -->
+  <script src="./js/Graph.js"></script>
+  <script src="./js/graphExamples.js"></script>
+  <script src="./js/appStates.js"></script>
+  <script src="./js/UiCtrl.js"></script>
+  <script src="./js/App.js"></script>
+</body>
+</html>
