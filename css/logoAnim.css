@@ -1,0 +1,63 @@
+#logo-svg-start-node   { animation: svgAnim1 8s cubic-bezier(0.65, 0, 0.35, 1) infinite; }
+#logo-svg-start-branch { animation: svgAnim2 8s cubic-bezier(0.65, 0, 0.35, 1) infinite; }
+#logo-svg-mid-node     { animation: svgAnim3 8s cubic-bezier(0.65, 0, 0.35, 1) infinite; }
+#logo-svg-mid-branch   { animation: svgAnim4 8s cubic-bezier(0.65, 0, 0.35, 1) infinite; }
+#logo-svg-side-node    { animation: svgAnim5 8s cubic-bezier(0.65, 0, 0.35, 1) infinite; }
+#logo-svg-end-branch   { animation: svgAnim6 8s cubic-bezier(0.65, 0, 0.35, 1) infinite; }
+#logo-svg-end-node     { animation: svgAnim7 8s cubic-bezier(0.65, 0, 0.35, 1) infinite; }
+
+/* For 8s, 6.25% is 500ms. */
+@keyframes svgAnim1 {
+  0% { fill: var(--myDark);}
+  6.25% { fill: var(--myPrimary); }
+  93.75% { fill: var(--myPrimary); }
+  100% { fill: var(--myDark); }
+}
+
+@keyframes svgAnim2 {
+  0% { fill: var(--myDark);}
+  6.25% { fill: var(--myDark); }
+  12.5% { fill: var(--mySecondary); }
+  93.75% { fill:var(--mySecondary);}
+  100% { fill:var(--myDark);}
+}
+
+@keyframes svgAnim3 {
+  0% { fill: var(--myDark);}
+  12.5% { fill: var(--myDark); }
+  18.75% { fill: var(--mySecondary); }
+  93.75% { fill:var(--mySecondary);}
+  100% { fill:var(--myDark);}
+}
+
+@keyframes svgAnim4 {
+  0% { fill: var(--myDark);}
+  18.75% { fill: var(--myDark); }
+  25% { fill: var(--mySecondary); }
+  37.5% { fill:var(--mySecondary);}
+  43.75% { fill:var(--myDark);}
+}
+
+@keyframes svgAnim5 {
+  0% { fill: var(--myDark);}
+  25% { fill: var(--myDark); }
+  31.25% { fill: var(--mySecondary); }
+  37.5% { fill:var(--mySecondary);}
+  43.75% { fill:var(--myDark);}
+}
+
+@keyframes svgAnim6 {
+  0% { fill: var(--myDark);}
+  43.75% { fill: var(--myDark); }
+  50% { fill: var(--mySecondary); }
+  93.75% { fill:var(--mySecondary);}
+  100% { fill:var(--myDark);}
+}
+
+@keyframes svgAnim7 {
+  0% { fill: var(--myDark);}
+  50% { fill: var(--myDark); }
+  56.25% { fill: var(--mySpecial); }
+  93.75% { fill:var(--mySpecial);}
+  100% { fill:var(--myDark);}
+}

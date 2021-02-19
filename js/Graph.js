@@ -163,10 +163,10 @@ class DijkstraCustom {
   constructor(adjacencyList, start, finish) {
     // Note that JavaScript processes object keys as strings even if they're given integers.
     // Thus start and finish arguments should be passed in as strings.
+    this.adjacencyList = adjacencyList;
     this.start = start;
     this.finish = finish;
 
-    this.adjacencyList = adjacencyList;
     // List 1 - Record vertices with numbers that represent total cost to start
     this.costFromStartTo = {};
     // List 2 - tells you which node to check next
@@ -177,6 +177,23 @@ class DijkstraCustom {
     this.current = null;
     this.result = [];
     this.algoSteps = [];
+    /**
+     * algoSteps.state.flag
+     * 0: Initialised lists
+     * 
+     * 1: Top of while-loop
+     *     Loop through neighbours
+     *     2: Calculated cost to neighbour
+     *         If better cost:
+     *         3: Lists before update
+     *         4: Updated lists
+     *         Else:
+     *         5: No update
+     *     6: Solution found
+     *     7: Push nodes to results array
+     * 8: Return path solution
+     * 9: No path solution found
+     */
 
     this.initLists();
   }
@@ -208,9 +225,12 @@ class DijkstraCustom {
 
         while (this.prevVisited[this.current]) {
           this.result.push(this.current);
+          this.pushStateToSteps({ flag: 7, result: JSON.parse(JSON.stringify(this.result)) });
           this.current = this.prevVisited[this.current];
         }
-        this.result = this.result.concat(this.current).reverse();
+        this.result = this.result.concat(this.current);
+        this.pushStateToSteps({ flag: 7, result: JSON.parse(JSON.stringify(this.result)) });
+        this.result = this.result.reverse();
         break;
       } else {
 
@@ -232,6 +252,12 @@ class DijkstraCustom {
         };
       }  // end if-else
     }  // end-while
+
+    if (this.result.length === 0) {
+      this.pushStateToSteps({ flag: 9 });
+    } else {
+      this.pushStateToSteps({ flag: 8, bestCost: this.costFromStartTo[this.finish] });
+    }
 
     return this.result;
   }

@@ -6,6 +6,8 @@
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
   <link rel="stylesheet" href="./css/style.css" />
+  <link rel="stylesheet" href="./css/logoAnim.css" />
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
   <title>Dijkstra's Shortest Path Algorithm</title>
 </head>
 <body>
@@ -21,7 +23,7 @@
             data-position="bottom"
             data-tooltip="Add Node"
           >
-            <i class="material-icons left">add_circle_outline</i>
+            <i class="material-icons left">add_circle</i>
             <!-- <span class="ml-1 hide-md">Add Node</span> -->
           </a>
         </li>
@@ -58,7 +60,7 @@
             id="run-btn"
             class="waves-effect btn cyan tooltipped"
             data-position="bottom"
-            data-tooltip="Run Djikstra's algorithm"
+            data-tooltip="Run"
           >
             <i class="material-icons left">play_arrow</i>
             <!-- <span class="ml-1 hide-md">Run</span> -->
@@ -70,7 +72,7 @@
             id="prev-btn"
             class="waves-effect btn cyan tooltipped"
             data-position="bottom"
-            data-tooltip="Go back to the previous step"
+            data-tooltip="Previous step"
           >
             <i class="material-icons left">arrow_back</i>
             <!-- <span class="ml-1 hide-md">Step Back</span> -->
@@ -82,7 +84,7 @@
             id="next-btn"
             class="waves-effect btn cyan tooltipped"
             data-position="bottom"
-            data-tooltip="Run algorithm to the next step"
+            data-tooltip="Next step"
           >
             <i class="material-icons left">arrow_forward</i>
             <!-- <span class="ml-1 hide-md">Step Forward</span> -->
@@ -112,6 +114,20 @@
             <!-- <span class="ml-1 hide-md">Skip to End</span> -->
           </a>
         </li>
+        <li>
+          <form action="#">
+            <div class="range-field">
+              <input
+                type="range"
+                id="autorun-slider"
+                class="tooltipped"
+                min="0"
+                max="6"
+                data-tooltip="Autorun speed"
+              />
+            </div>
+          </form>
+        </li>
       </ul>
 
       <ul id="nav-misc" class="right black-text">
@@ -138,16 +154,16 @@
           <i class="material-icons left">extension</i>
           </a>
         </li>
-        <!-- <li>
+        <li>
           <a
-            id="menu-btn"
-            class="waves-effect btn tooltipped"
+            id="info-btn"
+            class="waves-effect btn modal-trigger"
+            href="#info-modal"
             data-position="bottom"
-            data-tooltip="More"
           >
-            <i class="material-icons left">menu</i>
+            <i class="material-icons left">info</i>
           </a>
-        </li> -->
+        </li>
       </ul>
     </div>
   </nav>
@@ -185,7 +201,7 @@
 
   <div id="run-algo-modal" class="modal">
     <div class="modal-content">
-      <h4>Djiksta's Algorithm</h4>
+      <h4>Dijksta's Algorithm</h4>
       <div class="input-field">
         <select id="algo-start">
           <option value="" disabled selected>Choose your option</option>
@@ -202,21 +218,55 @@
         <label for="algo-end">Ending node</label>
         <!-- <span class="helper-text show-on-error">Node does not exist</span> -->
       </div>
-    <span class="helper-text hidden">[ ! ] Start and end points cannot be the same!</span>
-  </div>
+      <span class="helper-text hidden">[ ! ] Start and end points cannot be the same!</span>
+      <div class="input-field">
+        <label for="run-algo-guess">
+          <input id="run-algo-guess" type="checkbox" class="filled-in" />
+          <span>Compare your prediction to the result</span>
+        </label>
+      </div>
+    </div>
     <div class="modal-footer">
       <!-- <a class="modal-close btn-flat waves-effect waves-red">Cancel</a> -->
       <a class="btn waves-effect waves-green blue" id="run-start-btn">Run Algorithm</a>
     </div>
   </div>
 
-  <!-- SVG Canvas -->
+  <div id="info-modal" class="modal">
+    <div class="modal-content">
+      <svg
+        id="logo-svg" x="0px" y="0px" viewBox="0 0 53 53"
+        style="enable-background:new 0 0 53 53;" xml:space="preserve"
+      >
+        <rect id="logo-svg-end-branch" x="27" y="28" style="fill:#424A60;" width="2" height="18"/>
+        <rect id="logo-svg-start-branch" x="37.5" y="2.893" transform="matrix(0.7071 0.7071 -0.7071 0.7071 20.8223 -23.2696)" style="fill:#424A60;" width="2" height="21.213"/>
+        <rect x="15" y="21.858" transform="matrix(0.7071 0.7071 -0.7071 0.7071 30.1421 -0.7696)" style="fill:#424A60;" width="2" height="28.284"/>
+        <rect x="10.722" y="13.5" transform="matrix(0.7071 0.7071 -0.7071 0.7071 15.6716 -8.8345)" style="fill:#424A60;" width="15.556" height="2"/>
+        <rect id="logo-svg-mid-branch" x="26.893" y="32.5" transform="matrix(0.7071 0.7071 -0.7071 0.7071 34.6716 -16.7046)" style="fill:#424A60;" width="21.213" height="2"/>
+        <circle id="logo-svg-mid-node" style="fill:#d33232;" cx="28" cy="24" r="7" />
+        <circle id="logo-svg-start-node" style="fill:#2184d4;" cx="48" cy="5" r="5"/>
+        <circle id="logo-svg-side-node" style="fill:#424A60;" cx="44" cy="40" r="3"/>
+        <circle id="logo-svg-end-node" style="fill:#41a156;" cx="28" cy="48" r="5"/>
+        <circle style="fill:#424A60;" cx="5" cy="46" r="5"/>
+        <circle style="fill:#424A60;" cx="12" cy="8" r="3"/>
+      </svg>
+
+      <h4>Visualising Dijkstra's Algorithm</h4>
+      <p>Check out the <a href="https://github.com/tanxh34/visualise-dijkstra" target="_blank">GitHub repo</a> for the source code.</p>
+      <br />
+      <p>Layout created with <a href="https://materializecss.com/" target="_blank">Materialize CSS</a>.</p>
+    </div>
+    <div class="modal-footer">
+      <a class="modal-close btn waves-effect waves-green blue">Close</a>
+    </div>
+  </div>
+
   <div id="outer-container">
+    <!-- SVG Canvas -->
     <div id="canvas-container">
       <svg id="canvas" viewBox="0 0 850 600"></svg>
       <div id="algo-output-content"></div>
     </div>
-
 
     <div id="table-container">
       <table id="graph-table" class="graph-table highlight">
@@ -235,8 +285,10 @@
     </div>
   </div>
 
+  <!-- Bottom padding -->
+  <footer class="footer"></footer>
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-  <!-- <script src="https://unpkg.com/konva@7.0.3/konva.min.js"></script> -->
   <script src="./js/Graph.js"></script>
   <script src="./js/graphExamples.js"></script>
   <script src="./js/appStates.js"></script>

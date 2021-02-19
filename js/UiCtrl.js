@@ -1,6 +1,3 @@
-// TODO: ui  : Line 249
-// TODO: app : Line 99
-
 class UICtrl {
   constructor() {
     this.selectors = {
@@ -13,14 +10,16 @@ class UICtrl {
 
       runBtn: '#run-btn',
       runStartBtn: '#run-start-btn',
+      runAlgoGuess: '#run-algo-guess',
       prevBtn: '#prev-btn',
       nextBtn: '#next-btn',
       skipBtn: '#skip-btn',
       stopBtn: '#stop-btn',
+      autorunSlider: '#autorun-slider',
 
       refreshBtn: '#refresh-btn',
       loadExBtn: '#load-ex-btn',
-      // menuBtn: '#menu-btn',
+      infoBtn: '#info-btn',
 
       algoOutputContent: '#algo-output-content',
       graphTable: '#graph-table'
@@ -57,6 +56,7 @@ class UICtrl {
       onCloseEnd: this.closeAddEdgeModal
     });
     M.Modal.init(document.querySelector('#run-algo-modal'), {});
+    M.Modal.init(document.querySelector('#info-modal'), {});
 
     this.createGrid();
     this.hideGrid();
@@ -191,9 +191,9 @@ class UICtrl {
     return nodes.find(node => node.id === parseInt(id)).label;
   }
 
-  initTextDescription = () => {
+  initTextDescription = (html='') => {
     const algoOutputElem = document.querySelector(this.selectors.algoOutputContent)
-    algoOutputElem.innerHTML = '';
+    algoOutputElem.innerHTML = html;
   }
 
   updateTextDescription = (nodes, step) => {
@@ -207,12 +207,14 @@ class UICtrl {
     // Output different HTML strings based on which state.flag is specified
     const { costFromStartTo, current, state } = step;
     const currentLabel = current ? this.getLabelOfNodeFromId(nodes, current) : null;
+    let outStr = '';
 
     switch (state.flag) {
       case 0:
         return `
           <p>Initialised lists.</p>
           <p>Costs for all nodes initialised as Infinity.</p>
+
         `;
       case 1:
         return `
@@ -222,25 +224,75 @@ class UICtrl {
           </p>
         `;
       case 6:
-        let str = `
+        return `
           <p>
             Current node:
             <span class="current-node">${currentLabel}</span>
-            = destination node, so we're done!
+            = destination node, so we've found a solution!
+          </p>
+        `;
+      case 7:
+        outStr = `
+          <p>From the destination node, we go back to the starting node through the closest neighbours, and add them to a list.</p>
+          <br />
+          <p>
+            Current node:
+            <span class="current-node">${currentLabel}</span>
+            (#${current})
           </p>
           <br />
-          <p>Shortest path:</p>
+          <p>Shortest path result:</p>
         `;
-        app.processedResult.forEach((node) => {
-          str += `<p>(#${node.id}) ${node.label}</p>`;
+        state.result.forEach((nodeId) => {
+          const nodeLabel = this.getLabelOfNodeFromId(nodes, nodeId)
+          if (nodeId === current) {
+            outStr += `<p>(#${nodeId}) <span class="current-node">${nodeLabel}</span></p>`;
+          } else {
+            outStr += `<p>(#${nodeId}) ${nodeLabel}</p>`;
+          }
         });
-        return str;
+        return outStr;
+      case 8:
+        outStr = `
+          <p>Reverse the list, and we have the solution!</p>
+          <br />
+          <p>Shortest path result (cost = ${state.bestCost}):</p>
+        `;
+        app.processedResult.forEach((node, i) => {
+          let classname = '';
+          if (i === 0) {
+            classname = 'current-node';
+          } else if (i === app.processedResult.length - 1) {
+            classname = 'special-node';
+          } else {
+            classname = 'neighbour-node'
+          }
+          outStr += `<p>(#${node.id}) <span class="${classname}">${node.label}</span></p>`;
+        });
+        if (app.predictionMode) {
+          outStr += `<br/><p>Your predicted path (cost = ${app.predictionCost}):</p>`;
+          app.predictionInput.forEach(node => {
+            outStr += `<p>(#${node.id}) ${node.label}</p>`;
+          });
+        }
+        return outStr;
+      case 9:
+        // No result case
+        return `
+          <p>
+            The algorithm has searched through all the neighbours connected by edges, but couldn't find any edges that connect to the destination.
+          </p>
+          <br />
+          <p>
+            We can't find a shortest path because there is no path. Too bad...
+          </p>
+          `;
       default: break;
     }
 
     const neighbourLabel = state.neighbour ? this.getLabelOfNodeFromId(nodes, state.neighbour): null;
 
-    let outStr = `
+    outStr = `
       <p>Current node:
         <span class="current-node">${currentLabel} (#${current})</span>
       </p>
@@ -330,7 +382,8 @@ class UICtrl {
       // console.log(priorities[id]);
       const cost = id === app.algoStart.id ? 0 : costFromStartTo[id] || Infinity;
       const priority = priorities[id] ? priorities[id].priority : '';
-      const prev = prevVisited[id] ? `(#${prevVisited[id]})` : '';
+      const prevIdStr = prevVisited[id] ? `(#${prevVisited[id]})` : '';
+      const prevLabel = prevVisited[id] ? this.getLabelOfNodeFromId(nodes, prevVisited[id]) : '';
 
       const tableRow = document.createElement('tr');
       tableRow.innerHTML = `
@@ -338,7 +391,7 @@ class UICtrl {
         <td>${label}</td>
         <td>${cost}</td>
         <td>${priority}</td>
-        <td>${prev}</td>
+        <td>${prevIdStr} ${prevLabel}</td>
       `;
       if (parseInt(current) === id) {
         tableRow.classList.add('current-node');
@@ -395,9 +448,9 @@ class UICtrl {
       const { id } = node;
       const nodeElement = document.querySelector(`[data-node-id='${id}']`);
       if (index === 0) {
-        nodeElement.classList.add('special-node');
-      } else if (index === result.length - 1) {
         nodeElement.classList.add('current-node');
+      } else if (index === result.length - 1) {
+        nodeElement.classList.add('special-node');
       } else {
         nodeElement.classList.add('neighbour-node');
       }
@@ -454,8 +507,8 @@ class UICtrl {
       document.querySelector(this.selectors.addEdgeBtn),
       document.querySelector(this.selectors.deleteBtn),
       document.querySelector(this.selectors.refreshBtn),
-      document.querySelector(this.selectors.loadExBtn)
-      // document.querySelector(this.selectors.menuBtn)
+      document.querySelector(this.selectors.loadExBtn),
+      document.querySelector(this.selectors.infoBtn)
     ];
     if (enable) {
       buttonElements.forEach((button) => {
@@ -565,7 +618,8 @@ class UICtrl {
     }  // end inner-func
 
     if (!(app.currentState === APP_STATES.EDGE_EDIT ||
-          app.currentState === APP_STATES.DELETE_OBJ)) {
+          app.currentState === APP_STATES.DELETE_OBJ ||
+          app.currentState === APP_STATES.PREDICTING)) {
       return;
     }
 
@@ -622,8 +676,32 @@ class UICtrl {
         app.deleteEdge(start, end);
         return;
       }
-    }
-  };  // end if-delete-obj
+    }  // end if-delete-obj
+
+    if (app.currentState === APP_STATES.PREDICTING) {
+      if (!clickedObject.classList.contains('graph-node')) {
+        return;
+      }
+      const clickedNodeId = parseInt(clickedObject.dataset.nodeId);
+      if (clickedNodeId === app.currentPredSelection.id && 
+          clickedNodeId !== app.algoStart.id) {
+        app.predictionInput.pop();
+        app.updatePrediction();
+        return;
+      }
+      app.predSelectionNeighbours.forEach(node => {
+        if (clickedNodeId === node.id) {
+          app.predictionInput.push(node);
+          app.updatePrediction();
+          return;
+        }
+      });
+    }  // end if-predicting
+  };
+
+  displayPrediction = (nodes, edges) => {
+
+  }
 
   addEdgeSubmitHandler = () => {
     const weightInput = document.getElementById('add-edge-weight');

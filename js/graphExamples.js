@@ -563,5 +563,563 @@ const EXAMPLE_GRAPHS = [
         "weight": 6
       }
     ]
+  },
+  {
+    "nodes": [
+      {
+        "id": 0,
+        "label": "JE",
+        "x": 2,
+        "y": 11
+      },
+      {
+        "id": 1,
+        "label": "CCK",
+        "x": 2,
+        "y": 5
+      },
+      {
+        "id": 2,
+        "label": "Kranji",
+        "x": 2,
+        "y": 2
+      },
+      {
+        "id": 3,
+        "label": "Woodlands",
+        "x": 5,
+        "y": 0
+      },
+      {
+        "id": 4,
+        "label": "Yishun",
+        "x": 8,
+        "y": 1
+      },
+      {
+        "id": 5,
+        "label": "Bishan",
+        "x": 8,
+        "y": 5
+      },
+      {
+        "id": 6,
+        "label": "Newton",
+        "x": 8,
+        "y": 8
+      },
+      {
+        "id": 7,
+        "label": "Dhoby",
+        "x": 9,
+        "y": 10
+      },
+      {
+        "id": 8,
+        "label": "RP",
+        "x": 10,
+        "y": 12
+      },
+      {
+        "id": 9,
+        "label": "Bay",
+        "x": 11,
+        "y": 15
+      },
+      {
+        "id": 10,
+        "label": "Pasir Ris",
+        "x": 19,
+        "y": 5
+      },
+      {
+        "id": 11,
+        "label": "Tampines",
+        "x": 18,
+        "y": 7
+      },
+      {
+        "id": 12,
+        "label": "Tanah Merah",
+        "x": 17,
+        "y": 9
+      },
+      {
+        "id": 13,
+        "label": "Expo",
+        "x": 19,
+        "y": 10
+      },
+      {
+        "id": 14,
+        "label": "Paya Lebar",
+        "x": 14,
+        "y": 10
+      },
+      {
+        "id": 15,
+        "label": "Bugis",
+        "x": 12,
+        "y": 11
+      },
+      {
+        "id": 16,
+        "label": "Outram",
+        "x": 7,
+        "y": 14
+      },
+      {
+        "id": 17,
+        "label": "Buona",
+        "x": 4,
+        "y": 11
+      },
+      {
+        "id": 18,
+        "label": "Boon Lay",
+        "x": 0,
+        "y": 11
+      },
+      {
+        "id": 19,
+        "label": "Tuas",
+        "x": 0,
+        "y": 8
+      },
+      {
+        "id": 20,
+        "label": "Harbourfront",
+        "x": 5,
+        "y": 15
+      },
+      {
+        "id": 21,
+        "label": "Chinatown",
+        "x": 7,
+        "y": 12
+      },
+      {
+        "id": 22,
+        "label": "Little India",
+        "x": 10,
+        "y": 9
+      },
+      {
+        "id": 23,
+        "label": "Serangoon",
+        "x": 12,
+        "y": 5
+      },
+      {
+        "id": 24,
+        "label": "Sengkang",
+        "x": 14,
+        "y": 2
+      },
+      {
+        "id": 25,
+        "label": "Punggol",
+        "x": 15,
+        "y": 0
+      },
+      {
+        "id": 26,
+        "label": "Botanics",
+        "x": 5,
+        "y": 8
+      },
+      {
+        "id": 27,
+        "label": "Caldecott",
+        "x": 6,
+        "y": 6
+      },
+      {
+        "id": 28,
+        "label": "MacPherson",
+        "x": 14,
+        "y": 7
+      },
+      {
+        "id": 29,
+        "label": "Promenade",
+        "x": 13,
+        "y": 13
+      },
+      {
+        "id": 30,
+        "label": "BP",
+        "x": 4,
+        "y": 5
+      },
+      {
+        "id": 31,
+        "label": "Downtown",
+        "x": 9,
+        "y": 14
+      },
+      {
+        "id": 32,
+        "label": "Jln Besar",
+        "x": 12,
+        "y": 9
+      }
+    ],
+    "edges": [
+      {
+        "start": 0,
+        "end": 1,
+        "weight": 15
+      },
+      {
+        "start": 1,
+        "end": 2,
+        "weight": 8
+      },
+      {
+        "start": 2,
+        "end": 3,
+        "weight": 5
+      },
+      {
+        "start": 3,
+        "end": 4,
+        "weight": 15
+      },
+      {
+        "start": 4,
+        "end": 5,
+        "weight": 16
+      },
+      {
+        "start": 5,
+        "end": 6,
+        "weight": 12
+      },
+      {
+        "start": 6,
+        "end": 7,
+        "weight": 10
+      },
+      {
+        "start": 7,
+        "end": 8,
+        "weight": 5
+      },
+      {
+        "start": 8,
+        "end": 9,
+        "weight": 2
+      },
+      {
+        "start": 10,
+        "end": 11,
+        "weight": 3
+      },
+      {
+        "start": 11,
+        "end": 12,
+        "weight": 5
+      },
+      {
+        "start": 12,
+        "end": 13,
+        "weight": 3
+      },
+      {
+        "start": 12,
+        "end": 14,
+        "weight": 15
+      },
+      {
+        "start": 15,
+        "end": 8,
+        "weight": 6
+      },
+      {
+        "start": 8,
+        "end": 16,
+        "weight": 5
+      },
+      {
+        "start": 16,
+        "end": 17,
+        "weight": 16
+      },
+      {
+        "start": 15,
+        "end": 14,
+        "weight": 12
+      },
+      {
+        "start": 17,
+        "end": 0,
+        "weight": 15
+      },
+      {
+        "start": 0,
+        "end": 18,
+        "weight": 13
+      },
+      {
+        "start": 18,
+        "end": 19,
+        "weight": 17
+      },
+      {
+        "start": 20,
+        "end": 16,
+        "weight": 3
+      },
+      {
+        "start": 16,
+        "end": 21,
+        "weight": 2
+      },
+      {
+        "start": 7,
+        "end": 22,
+        "weight": 2
+      },
+      {
+        "start": 21,
+        "end": 7,
+        "weight": 5
+      },
+      {
+        "start": 22,
+        "end": 23,
+        "weight": 18
+      },
+      {
+        "start": 23,
+        "end": 24,
+        "weight": 15
+      },
+      {
+        "start": 24,
+        "end": 25,
+        "weight": 3
+      },
+      {
+        "start": 20,
+        "end": 17,
+        "weight": 20
+      },
+      {
+        "start": 17,
+        "end": 26,
+        "weight": 10
+      },
+      {
+        "start": 26,
+        "end": 27,
+        "weight": 5
+      },
+      {
+        "start": 5,
+        "end": 27,
+        "weight": 5
+      },
+      {
+        "start": 5,
+        "end": 23,
+        "weight": 5
+      },
+      {
+        "start": 23,
+        "end": 28,
+        "weight": 7
+      },
+      {
+        "start": 28,
+        "end": 14,
+        "weight": 2
+      },
+      {
+        "start": 14,
+        "end": 29,
+        "weight": 12
+      },
+      {
+        "start": 9,
+        "end": 29,
+        "weight": 6
+      },
+      {
+        "start": 1,
+        "end": 30,
+        "weight": 15
+      },
+      {
+        "start": 30,
+        "end": 26,
+        "weight": 25
+      },
+      {
+        "start": 26,
+        "end": 6,
+        "weight": 8
+      },
+      {
+        "start": 6,
+        "end": 22,
+        "weight": 3
+      },
+      {
+        "start": 22,
+        "end": 15,
+        "weight": 3
+      },
+      {
+        "start": 15,
+        "end": 29,
+        "weight": 2
+      },
+      {
+        "start": 29,
+        "end": 31,
+        "weight": 6
+      },
+      {
+        "start": 31,
+        "end": 21,
+        "weight": 5
+      },
+      {
+        "start": 21,
+        "end": 32,
+        "weight": 8
+      },
+      {
+        "start": 32,
+        "end": 28,
+        "weight": 12
+      },
+      {
+        "start": 28,
+        "end": 11,
+        "weight": 16
+      },
+      {
+        "start": 11,
+        "end": 13,
+        "weight": 12
+      }
+    ]
+  },
+  {
+    "nodes": [
+      {
+        "id": 0,
+        "label": "0",
+        "x": 9,
+        "y": 0
+      },
+      {
+        "id": 1,
+        "label": "1",
+        "x": 7,
+        "y": 6
+      },
+      {
+        "id": 2,
+        "label": "2",
+        "x": 10,
+        "y": 4
+      },
+      {
+        "id": 3,
+        "label": "3",
+        "x": 4,
+        "y": 7
+      },
+      {
+        "id": 4,
+        "label": "4",
+        "x": 14,
+        "y": 7
+      },
+      {
+        "id": 5,
+        "label": "5",
+        "x": 7,
+        "y": 11
+      },
+      {
+        "id": 6,
+        "label": "6",
+        "x": 10,
+        "y": 11
+      },
+      {
+        "id": 7,
+        "label": "7",
+        "x": 9,
+        "y": 15
+      }
+    ],
+    "edges": [
+      {
+        "start": 0,
+        "end": 1,
+        "weight": 7
+      },
+      {
+        "start": 1,
+        "end": 3,
+        "weight": 9
+      },
+      {
+        "start": 1,
+        "end": 5,
+        "weight": 1
+      },
+      {
+        "start": 3,
+        "end": 5,
+        "weight": 4
+      },
+      {
+        "start": 5,
+        "end": 7,
+        "weight": 9
+      },
+      {
+        "start": 6,
+        "end": 7,
+        "weight": 2
+      },
+      {
+        "start": 6,
+        "end": 4,
+        "weight": 8
+      },
+      {
+        "start": 2,
+        "end": 6,
+        "weight": 5
+      },
+      {
+        "start": 4,
+        "end": 2,
+        "weight": 2
+      },
+      {
+        "start": 2,
+        "end": 0,
+        "weight": 6
+      },
+      {
+        "start": 0,
+        "end": 3,
+        "weight": 3
+      },
+      {
+        "start": 4,
+        "end": 7,
+        "weight": 7
+      }
+    ]
   }
 ];

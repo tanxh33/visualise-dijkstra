@@ -2,17 +2,26 @@ class App {
   constructor() {
     this.currentGraph = { nodes: [], edges: [] };
     this.currentState = APP_STATES.NONE;
+    this.exampleGraphIdx = 0;
 
     this.graph = new WeightedGraph();
     this.algoStart = null;
     this.algoEnd = null;
+    this.predictionMode = false;
+    this.predictionInput = [];
+    this.predictionCost = 0;
+
+    this.dijkstras = null;
+    this.processedResult = null;
+    this.stepCounter = 0;
+    this.stepMax = 0;
+    this.autorunInterval = 500;
 
     this.ui = new UICtrl();
 
     document.addEventListener('DOMContentLoaded', () => {
       this.ui.init();
       this.refresh();
-      // this.loadExampleGraph();
     });
 
     this.loadEventListeners();
@@ -29,25 +38,29 @@ class App {
 
     document.querySelector(this.ui.selectors.runBtn).addEventListener('click', () => this.runBtnHandler());
     document.querySelector(this.ui.selectors.runStartBtn).addEventListener('click', () => this.initAlgorithm());
-    document.querySelector(this.ui.selectors.prevBtn).addEventListener('click', () => this.previousStep());
-    document.querySelector(this.ui.selectors.nextBtn).addEventListener('click', () => this.nextStep());
+    document.querySelector(this.ui.selectors.prevBtn).addEventListener('click', () => this.previousBtnHandler());
+    document.querySelector(this.ui.selectors.nextBtn).addEventListener('click', () => this.nextBtnHandler());
     document.querySelector(this.ui.selectors.skipBtn).addEventListener('click', () => this.skipAlgorithm());
     document.querySelector(this.ui.selectors.stopBtn).addEventListener('click', () => this.stopRunning());
+    document.querySelector(this.ui.selectors.autorunSlider).addEventListener('input', (e) => this.resetAutorun(e.target.value));
 
     document.querySelector(this.ui.selectors.refreshBtn).addEventListener('click', () => this.refresh());
     document.querySelector(this.ui.selectors.loadExBtn).addEventListener('click', () => this.loadExampleGraph());
 
     // Prevent entering non-numbers into number field
     document.querySelector(this.ui.selectors.addEdgeWeightInput).addEventListener('keydown', this.numberInputKeydown);
+
+    window.addEventListener('keydown', this.globalKeyDown);
   }
 
   refresh = () => {
     this.currentState = APP_STATES.NONE;
     this.currentGraph = { nodes: [], edges: [] };
+    this.resetAutorun(document.querySelector(this.ui.selectors.autorunSlider).value);
     this.graph.resetGraph();
     this.ui.resetAll();
     this.ui.toggleButtonSet2(false);
-    this.ui.toast({ html: `Graph reset`, displayLength: 1000 });
+    this.ui.toast({ html: `Refreshed!`, displayLength: 1000 });
     this.ui.drawTable([]);
     this.ui.initTextDescription();
   }
@@ -122,7 +135,6 @@ class App {
     return false;
   }
 
-
   addEdge = (start, end, weight) => {
     // Add to currentGraph
     const newEdge = {start, end, weight};
@@ -161,7 +173,7 @@ class App {
 
     // Remove from data structure
     this.graph.removeNode(id);
-    this.graph.printAdjList();
+    // this.graph.printAdjList();
 
     // Redraw UI
     this.ui.drawGraph(this.currentGraph.nodes, this.currentGraph.edges);
@@ -184,24 +196,40 @@ class App {
   }
 
   runBtnHandler = () => {
-    console.log('Run btn');
-
+    if (this.algoIsRunning() && this.stepCounter === this.stepMax) {
+      return;
+    }
     if (this.currentState === APP_STATES.RUNNING) {
-      this.currentState = APP_STATES.PAUSED;
-      this.ui.toggleRunBtn('play');
+      this.stopAutorun();
+      return;
     }
-    else if (this.currentState === APP_STATES.PAUSED) {
-      this.currentState = APP_STATES.RUNNING;
-      this.ui.toggleRunBtn('pause');
+    if (this.currentState === APP_STATES.PAUSED) {
+      this.startAutorun();
+      return;
     }
-    else {
-      // Select start and end nodes for the algorithm using modal
-      this.ui.resetDrawButtons();
-      this.ui.hideGrid();
-      this.ui.resetValues();
-      this.initSelects();
-      M.Modal.getInstance(document.querySelector('#run-algo-modal')).open();
+    if (this.currentState === APP_STATES.PREDICTING) {
+      this.calculatePredictionCost();
+      this.processAlgorithm();
+      return;
     }
+
+    // Open run-algo-modal.
+    // Select start and end nodes for the algorithm.
+    this.ui.resetDrawButtons();
+    this.ui.hideGrid();
+    this.ui.resetValues();
+    this.initSelects();
+    M.Modal.getInstance(document.querySelector('#run-algo-modal')).open();
+  }
+
+  previousBtnHandler = () => {
+    this.stopAutorun();
+    this.previousStep()
+  }
+
+  nextBtnHandler = () => {
+    this.stopAutorun();
+    this.nextStep()
   }
 
   initSelects = () => {
@@ -220,8 +248,7 @@ class App {
       }
     });
 
-    const instances = M.FormSelect.init(selects, { classes: 'mb-3' });
-    // console.log(instances);
+    M.FormSelect.init(selects, { classes: 'mb-3' });
     document.querySelector('#run-algo-modal .helper-text').classList.add('hidden');
   }
 
@@ -240,21 +267,87 @@ class App {
     // Set global state to the start and end nodes' IDs
     this.algoStart = this.currentGraph.nodes.find(node => node.label === startLabel);
     this.algoEnd = this.currentGraph.nodes.find(node => node.label === endLabel);
-    console.log(`run: start=${this.algoStart.id}, end=${this.algoEnd.id}`);
+    // console.log(`run: start=${this.algoStart.id}, end=${this.algoEnd.id}`);
 
     M.Modal.getInstance(document.querySelector('#run-algo-modal')).close();
 
+    this.predictionMode = document.querySelector(this.ui.selectors.runAlgoGuess).checked;
+    if (this.predictionMode) {
+      this.getUserPrediction();
+    } else {
+      this.processAlgorithm();
+    }
+  }
+
+  getUserPrediction = () => {
+    // User will start running the algorithm by pressing run-btn again.
+    this.currentState = APP_STATES.PREDICTING;
+    this.ui.toggleButtonSet1(false);
+    this.ui.removeHighlightfromAllEdges();
+    this.ui.removeHighlightfromAllNodes();
+    this.ui.initTextDescription(`
+      <h5>From ${this.algoStart.label} to ${this.algoEnd.label}</h5>
+      <p>Predict the shortest path:</p>
+      <p>Compare your human intuition to the algorithm's result!</p><br />
+      <p>Click on the nodes to define a path.</p>
+      <p>Click on the run button again to run the algorithm.</p>
+    `);
+    this.predictionInput = [];
+    this.predictionInput.push(this.algoStart);
+    this.updatePrediction();
+  }
+
+  updatePrediction = () => {
+    this.calculatePredictionCost();
+
+    this.ui.removeHighlightfromAllNodes();
+
+    this.currentPredSelection = this.predictionInput[this.predictionInput.length - 1];
+    document.querySelector(`[data-node-id='${this.currentPredSelection.id}']`).classList.add('current-node');
+    document.querySelector(`[data-node-id='${this.algoEnd.id}']`).classList.add('special-node');
+
+    this.predSelectionNeighbours = [];
+    const neighbourIds = Object.keys(this.graph.adjacencyList[this.currentPredSelection.id]);
+    neighbourIds.forEach(id => {
+      const node = this.currentGraph.nodes.find(node => parseInt(id) === node.id);
+      this.predSelectionNeighbours.push(node);
+    });
+
+    this.predSelectionNeighbours.forEach((node) => {
+      document.querySelector(`[data-node-id='${node.id}']`).classList.add('neighbour-node');
+    });
+
+    let predStr = '';
+    this.predictionInput.forEach(node => {
+      predStr += `<p>(#${node.id}) ${node.label}</p>`;
+    });
+
+    this.ui.initTextDescription(`
+      <h5>From ${this.algoStart.label} to ${this.algoEnd.label}</h5>
+      <p>Predict the shortest path:</p>
+      <p>Compare your human intuition to the algorithm's result!</p><br />
+      <p>Click on the nodes to define a path.</p>
+      <p>Click on the run button again to run the algorithm.</p><br />
+      <p>Selected path (cost = ${this.predictionCost}):</p>
+    ` + predStr);
+  }
+
+  calculatePredictionCost = () => {
+    this.predictionCost = 0;
+    for (let i = 1; i < this.predictionInput.length; i++) {
+      const prevId = this.predictionInput[i-1].id;
+      const nextId = this.predictionInput[i].id;
+      this.predictionCost += this.graph.adjacencyList[prevId][nextId];
+    }
+  }
+
+  processAlgorithm = () => {
     this.currentState = APP_STATES.RUNNING;
     this.ui.toggleRunBtn('pause');
     this.ui.toggleButtonSet1(false);
     this.ui.toggleButtonSet2(true);
 
-    this.processAlgorithm();
-  }
-
-  processAlgorithm = () => {
     // Disable other buttons
-    this.ui.toggleButtonSet1(false);
     this.ui.drawGraph(this.currentGraph.nodes, this.currentGraph.edges);
     this.ui.initTextDescription();
     this.ui.drawTable(this.currentGraph.nodes);
@@ -269,15 +362,11 @@ class App {
       item = parseInt(item);
       return this.currentGraph.nodes.find(node => node.id === item);
     });
-    // console.log("Ran algo:");
-    // console.log('Result', this.processedResult);
-    // console.log('CurrentGraphNodes', this.currentGraph.nodes);
-    // console.log('AlgoSteps', this.dijkstras.algoSteps);
-    // console.log("End output");
 
     this.stepCounter = 0;
     this.stepMax = this.dijkstras.algoSteps.length - 1;
     this.updateStep();
+    this.startAutorun();
   }
 
   updateStep = () => {
@@ -286,6 +375,7 @@ class App {
     if (this.stepCounter === this.stepMax) {
       // Special action for final step
       this.ui.updateGraphLast(this.processedResult);
+      this.stopAutorun();
     } else {
       this.ui.updateGraph(this.currentGraph, this.dijkstras.algoSteps[this.stepCounter]);
     }
@@ -296,7 +386,6 @@ class App {
     if (!(this.algoIsRunning())) { return; }
     if (this.stepCounter <= 0) { return; }
 
-    console.log('Prev btn');
     this.stepCounter--;
     this.updateStep();
   }
@@ -305,7 +394,6 @@ class App {
     if (!(this.algoIsRunning())) { return; }
     if (this.stepCounter >= this.stepMax) { return; }
 
-    console.log('Next btn');
     this.stepCounter++;
     this.updateStep();
   }
@@ -313,9 +401,7 @@ class App {
   skipAlgorithm = () => {
     if (!(this.algoIsRunning())) { return; }
 
-    console.log('Skip btn');
-    this.currentState = APP_STATES.PAUSED;
-    this.ui.toggleRunBtn('play');
+    this.stopAutorun();
     this.stepCounter = this.stepMax;
     this.updateStep();
   }
@@ -323,21 +409,56 @@ class App {
   stopRunning = () => {
     if (!(this.algoIsRunning())) { return; }
 
-    console.log('Stop btn');
+    this.stopAutorun();
     this.currentState = APP_STATES.NONE;
-    this.ui.toggleRunBtn('play');
     this.ui.toggleButtonSet1(true);
     this.ui.toggleButtonSet2(false);
     this.algoStart = null;
     this.algoEnd = null;
   }
 
+  startAutorun = () => {
+    this.currentState = APP_STATES.RUNNING;
+    this.autorunInstance = setInterval(this.nextStep, this.autorunInterval);
+    this.ui.toggleRunBtn('pause');
+  }
+
+  stopAutorun = () => {
+    clearInterval(this.autorunInstance);
+    this.currentState = APP_STATES.PAUSED;
+    this.ui.toggleRunBtn('play');
+  }
+
+  resetAutorun = (value) => {
+    switch (value) {
+      case '0': this.autorunInterval = 2000; break;
+      case '1': this.autorunInterval = 1250; break;
+      case '2': this.autorunInterval = 800; break;
+      case '3': this.autorunInterval = 500; break;
+      case '4': this.autorunInterval = 250; break;
+      case '5': this.autorunInterval = 100; break;
+      case '6': this.autorunInterval = 70; break;
+      default: break;
+    }
+
+    if (this.currentState === APP_STATES.RUNNING) {
+      clearInterval(this.autorunInstance);
+      this.autorunInstance = setInterval(
+        this.nextStep,
+        this.autorunInterval
+      );
+    }
+  }
+
   loadExampleGraph = () => {
-    console.log('Load graph btn');
     this.currentState = APP_STATES.NONE;
 
     // Copy example graph:
-    const randomGraphIdx = Math.floor(Math.random() * EXAMPLE_GRAPHS.length);
+    let randomGraphIdx = this.exampleGraphIdx;
+    while (randomGraphIdx === this.exampleGraphIdx) {
+      randomGraphIdx = Math.floor(Math.random() * EXAMPLE_GRAPHS.length);
+    }
+    this.exampleGraphIdx = randomGraphIdx;
     this.currentGraph = JSON.parse(JSON.stringify(EXAMPLE_GRAPHS[randomGraphIdx]));  // Deep copy
 
     const { nodes, edges } = this.currentGraph;
@@ -359,9 +480,6 @@ class App {
     this.ui.initTextDescription();
     this.ui.drawTable(nodes);
     this.ui.toast({ html: `Graph loaded`, displayLength: 1000 });
-
-    // Log to console
-    // this.graph.printAdjList();
   }
 
   numberInputKeydown = (e) => {
@@ -373,6 +491,22 @@ class App {
       e.key.length === 1 && !contains(allowedChars, e.key) ||
       e.key === '.' && contains(e.target.value, '.');
       invalidKey && e.preventDefault();
+  }
+
+  globalKeyDown = (e) => {
+    if (this.algoIsRunning()) {
+      switch (e.key) {
+        case 'ArrowLeft':
+          e.preventDefault();
+          this.previousBtnHandler();
+          break;
+        case 'ArrowRight':
+          e.preventDefault();
+          this.nextBtnHandler();
+          break;
+        default: break;
+      } 
+    }
   }
 
   algoIsRunning = () => {
