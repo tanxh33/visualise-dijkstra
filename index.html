@@ -72,7 +72,7 @@
             id="prev-btn"
             class="waves-effect btn cyan tooltipped"
             data-position="bottom"
-            data-tooltip="Previous step"
+            data-tooltip="Previous step (←)"
           >
             <i class="material-icons left">arrow_back</i>
             <!-- <span class="ml-1 hide-md">Step Back</span> -->
@@ -84,7 +84,7 @@
             id="next-btn"
             class="waves-effect btn cyan tooltipped"
             data-position="bottom"
-            data-tooltip="Next step"
+            data-tooltip="Next step (→)"
           >
             <i class="material-icons left">arrow_forward</i>
             <!-- <span class="ml-1 hide-md">Step Forward</span> -->
@@ -179,7 +179,7 @@
         </div>
     </div>
     <div class="modal-footer">
-      <!-- <a class="modal-close btn-flat waves-effect waves-red">Cancel</a> -->
+      <a class="modal-close btn-flat waves-effect waves-red">Cancel</a>
       <a class="btn waves-effect waves-green blue" id="add-node-submit-btn">Add Node</a>
     </div>
   </div>
@@ -190,11 +190,11 @@
       <div class="input-field">
         <input id="add-edge-weight" class="validate" type="number" value="1" min="1" />
         <label for="add-edge-weight">Edge weight</label>
-        <span class="helper-text" data-error="Weight should be a postiive number"></span>
+        <span class="helper-text" data-error="Weight should be a positive number"></span>
       </div>
     </div>
     <div class="modal-footer">
-      <!-- <a class="modal-close btn-flat waves-effect waves-red">Cancel</a> -->
+      <a class="modal-close btn-flat waves-effect waves-red">Cancel</a>
       <a class="btn waves-effect waves-green blue" id="add-edge-submit-btn">Add Edge</a>
     </div>
   </div>
@@ -204,31 +204,52 @@
       <h4>Dijksta's Algorithm</h4>
       <div class="input-field">
         <select id="algo-start">
-          <option value="" disabled selected>Choose your option</option>
+          <option value="" disabled selected>Start</option>
         </select>
-        <!-- <input id="algo-start" type="text"> -->
         <label for="algo-start">Starting node</label>
-        <!-- <span class="helper-text show-on-error">Node does not exist</span> -->
       </div>
       <div class="input-field">
         <select id="algo-end">
-          <option value="" disabled selected>Choose your option</option>
+          <option value="" disabled selected>End</option>
         </select>
-        <!-- <input id="algo-end" type="text"> -->
         <label for="algo-end">Ending node</label>
-        <!-- <span class="helper-text show-on-error">Node does not exist</span> -->
       </div>
       <span class="helper-text hidden">[ ! ] Start and end points cannot be the same!</span>
       <div class="input-field">
         <label for="run-algo-guess">
           <input id="run-algo-guess" type="checkbox" class="filled-in" />
-          <span>Compare your prediction to the result</span>
+          <span>Test Mode: Make your own prediction</span>
         </label>
       </div>
     </div>
     <div class="modal-footer">
-      <!-- <a class="modal-close btn-flat waves-effect waves-red">Cancel</a> -->
+      <a class="modal-close btn-flat waves-effect waves-red">Cancel</a>
       <a class="btn waves-effect waves-green blue" id="run-start-btn">Run Algorithm</a>
+    </div>
+  </div>
+
+  <div id="predict-tips-modal" class="modal">
+    <div class="modal-content">
+      <h4>Setting your prediction</h4>
+      <p>Compare your human intuition to the algorithm's result!</p>
+      <br />
+      <div class="tips-grid">
+          <img src="./img/tips-1.png" alt="" />
+          <img src="./img/tips-2.png" alt="" />
+          <img src="./img/tips-3.png" alt="" />
+          <p>Click on a <span class="strong">neighbouring node</span> to add to your predicted path</p>
+          <p>Click on the <span class="strong">source node</span> to remove it from your predicted path</p>
+          <p>Click the <span class="strong">run button</span> again when you're done to run the algorithm</p>
+      </div>
+      <div class="input-field">
+        <label for="dont-show-tips-again">
+          <input id="dont-show-tips-again" type="checkbox" class="filled-in" />
+          <span>Don't show me this again</span>
+        </label>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <a class="modal-close btn waves-effect waves-green blue">Continue</a>
     </div>
   </div>
 

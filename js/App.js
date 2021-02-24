@@ -15,13 +15,22 @@ class App {
     this.processedResult = null;
     this.stepCounter = 0;
     this.stepMax = 0;
+
     this.autorunInterval = 500;
+    this.showTips = true;
 
     this.ui = new UICtrl();
+    this.initText = `
+      <h5>Visualising Dijkstra's Algorithm</h5>
+      <p>This is a tool for learners to understand Dijkstra's shortest path algorithm.</p><br />
+      <p><span class="strong">Make your own graph</span> by adding nodes and edges with the buttons on the top left.</p>
+      <p><span class="strong">Run the algorithm</span> to find the shortest path between two nodes.</p><br />
+      <p>You can also try loading some pre-made graphs with the 'Load Example' button.</p>
+    `;
 
     document.addEventListener('DOMContentLoaded', () => {
       this.ui.init();
-      this.refresh();
+      this.init();
     });
 
     this.loadEventListeners();
@@ -43,9 +52,15 @@ class App {
     document.querySelector(this.ui.selectors.skipBtn).addEventListener('click', () => this.skipAlgorithm());
     document.querySelector(this.ui.selectors.stopBtn).addEventListener('click', () => this.stopRunning());
     document.querySelector(this.ui.selectors.autorunSlider).addEventListener('input', (e) => this.resetAutorun(e.target.value));
+    document.querySelector(this.ui.selectors.dontShowTipsAgain).addEventListener('change', (e) => this.showTips = !e.target.checked);
 
     document.querySelector(this.ui.selectors.refreshBtn).addEventListener('click', () => this.refresh());
     document.querySelector(this.ui.selectors.loadExBtn).addEventListener('click', () => this.loadExampleGraph());
+
+    // Press 'enter' to submit within modals
+    document.querySelector(this.ui.selectors.addNodeModal).addEventListener('keydown', (e) => { if (e.key === 'Enter') this.ui.addNodeSubmitHandler(); });
+    document.querySelector(this.ui.selectors.addEdgeModal).addEventListener('keydown', (e) => { if (e.key === 'Enter') this.ui.addEdgeSubmitHandler(); });
+    document.querySelector(this.ui.selectors.runAlgoModal).addEventListener('keydown', (e) => { if (e.key === 'Enter') this.initAlgorithm(); });
 
     // Prevent entering non-numbers into number field
     document.querySelector(this.ui.selectors.addEdgeWeightInput).addEventListener('keydown', this.numberInputKeydown);
@@ -53,16 +68,24 @@ class App {
     window.addEventListener('keydown', this.globalKeyDown);
   }
 
-  refresh = () => {
+  init = () => {
     this.currentState = APP_STATES.NONE;
     this.currentGraph = { nodes: [], edges: [] };
     this.resetAutorun(document.querySelector(this.ui.selectors.autorunSlider).value);
     this.graph.resetGraph();
+    this.enableEdgeBtnLogic();
+    this.enableDeleteBtnLogic();
+    this.enableRunBtnLogic();
     this.ui.resetAll();
     this.ui.toggleButtonSet2(false);
-    this.ui.toast({ html: `Refreshed!`, displayLength: 1000 });
     this.ui.drawTable([]);
-    this.ui.initTextDescription();
+    this.ui.initTextDescription(this.initText);
+  }
+
+  refresh = () => {
+    // init() but with an extra toast message
+    this.ui.toast({ html: `Graph cleared`, displayLength: 1000 });
+    this.init();
   }
 
   addNodeHandler = () => {
@@ -71,7 +94,7 @@ class App {
       this.currentState = APP_STATES.NODE_EDIT;
       this.ui.showGrid();
       this.ui.darkenButton(document.querySelector(this.ui.selectors.addNodeBtn));
-      this.ui.toast({ html: `Add Node`, displayLength: 1000 });
+      this.ui.toast({ html: `Add node mode`, displayLength: 1000 });
     } else {
       this.currentState = APP_STATES.NONE;
       this.ui.hideGrid();
@@ -103,17 +126,20 @@ class App {
     // Redraw UI
     this.ui.drawGraph(this.currentGraph.nodes, this.currentGraph.edges);
     this.ui.drawTable(this.currentGraph.nodes);
+
+    this.enableDeleteBtnLogic();
+    this.enableEdgeBtnLogic();
+    this.enableRunBtnLogic();
   }
 
   addEdgeHandler = () => {
     this.ui.resetDrawButtons();
     this.ui.hideGrid();
     this.ui.resetValues();
-    if (this.currentState !== APP_STATES.EDGE_EDIT &&
-        this.currentGraph.nodes.length >= 2) {
+    if (this.currentState !== APP_STATES.EDGE_EDIT) {
       this.currentState = APP_STATES.EDGE_EDIT;
       this.ui.darkenButton(document.querySelector(this.ui.selectors.addEdgeBtn));
-      this.ui.toast({ html: `Add Edge`, displayLength: 1000 });
+      this.ui.toast({ html: `Add edge mode`, displayLength: 1000 });
     } else {
       this.currentState = APP_STATES.NONE;
     }
@@ -178,6 +204,10 @@ class App {
     // Redraw UI
     this.ui.drawGraph(this.currentGraph.nodes, this.currentGraph.edges);
     this.ui.drawTable(this.currentGraph.nodes);
+
+    this.enableEdgeBtnLogic();
+    this.enableDeleteBtnLogic();
+    this.enableRunBtnLogic();
   }
 
   deleteEdge = (start, end) => {
@@ -219,7 +249,7 @@ class App {
     this.ui.hideGrid();
     this.ui.resetValues();
     this.initSelects();
-    M.Modal.getInstance(document.querySelector('#run-algo-modal')).open();
+    M.Modal.getInstance(document.querySelector(this.ui.selectors.runAlgoModal)).open();
   }
 
   previousBtnHandler = () => {
@@ -249,7 +279,7 @@ class App {
     });
 
     M.FormSelect.init(selects, { classes: 'mb-3' });
-    document.querySelector('#run-algo-modal .helper-text').classList.add('hidden');
+    document.querySelector(this.ui.selectors.runAlgoModal + ' .helper-text').classList.add('hidden');
   }
 
   initAlgorithm = () => {
@@ -260,7 +290,7 @@ class App {
     const endLabel = endInstance.input.value;
 
     if (startLabel === endLabel) {
-      document.querySelector('#run-algo-modal .helper-text').classList.remove('hidden');
+      document.querySelector(this.ui.selectors.runAlgoModal + ' .helper-text').classList.remove('hidden');
       return;
     }
 
@@ -269,10 +299,14 @@ class App {
     this.algoEnd = this.currentGraph.nodes.find(node => node.label === endLabel);
     // console.log(`run: start=${this.algoStart.id}, end=${this.algoEnd.id}`);
 
-    M.Modal.getInstance(document.querySelector('#run-algo-modal')).close();
+    M.Modal.getInstance(document.querySelector(this.ui.selectors.runAlgoModal)).close();
 
     this.predictionMode = document.querySelector(this.ui.selectors.runAlgoGuess).checked;
     if (this.predictionMode) {
+      this.currentState = APP_STATES.PREDICTING;
+      if (this.showTips) {
+        M.Modal.getInstance(document.querySelector(this.ui.selectors.predictTipsModal)).open();
+      }
       this.getUserPrediction();
     } else {
       this.processAlgorithm();
@@ -281,17 +315,9 @@ class App {
 
   getUserPrediction = () => {
     // User will start running the algorithm by pressing run-btn again.
-    this.currentState = APP_STATES.PREDICTING;
     this.ui.toggleButtonSet1(false);
     this.ui.removeHighlightfromAllEdges();
     this.ui.removeHighlightfromAllNodes();
-    this.ui.initTextDescription(`
-      <h5>From ${this.algoStart.label} to ${this.algoEnd.label}</h5>
-      <p>Predict the shortest path:</p>
-      <p>Compare your human intuition to the algorithm's result!</p><br />
-      <p>Click on the nodes to define a path.</p>
-      <p>Click on the run button again to run the algorithm.</p>
-    `);
     this.predictionInput = [];
     this.predictionInput.push(this.algoStart);
     this.updatePrediction();
@@ -324,11 +350,12 @@ class App {
 
     this.ui.initTextDescription(`
       <h5>From ${this.algoStart.label} to ${this.algoEnd.label}</h5>
-      <p>Predict the shortest path:</p>
+      <p class="strong">Predict the shortest path:</p>
       <p>Compare your human intuition to the algorithm's result!</p><br />
-      <p>Click on the nodes to define a path.</p>
-      <p>Click on the run button again to run the algorithm.</p><br />
-      <p>Selected path (cost = ${this.predictionCost}):</p>
+      <p>Click on a <span class="strong">neighbouring node</span> to add to your predicted path.</p>
+      <p>Click on the <span class="strong">source node</span> to remove it from your predicted path.</p>
+      <p>Click on the <span class="strong">run button</span> again to run the algorithm.</p><br />
+      <p class="strong">Selected path (cost = ${this.predictionCost}):</p>
     ` + predStr);
   }
 
@@ -375,9 +402,11 @@ class App {
     if (this.stepCounter === this.stepMax) {
       // Special action for final step
       this.ui.updateGraphLast(this.processedResult);
+      this.ui.toggleButtonSet3(false);
       this.stopAutorun();
     } else {
       this.ui.updateGraph(this.currentGraph, this.dijkstras.algoSteps[this.stepCounter]);
+      this.ui.toggleButtonSet3(true);
     }
     // ... others ...
   }
@@ -411,6 +440,7 @@ class App {
 
     this.stopAutorun();
     this.currentState = APP_STATES.NONE;
+    this.ui.toggleButtonSet3(true);
     this.ui.toggleButtonSet1(true);
     this.ui.toggleButtonSet2(false);
     this.algoStart = null;
@@ -437,7 +467,7 @@ class App {
       case '3': this.autorunInterval = 500; break;
       case '4': this.autorunInterval = 250; break;
       case '5': this.autorunInterval = 100; break;
-      case '6': this.autorunInterval = 70; break;
+      case '6': this.autorunInterval = 65; break;
       default: break;
     }
 
@@ -476,10 +506,41 @@ class App {
 
     // Reset UI, then draw to UI:
     this.ui.resetAll();
+    this.enableDeleteBtnLogic();
+    this.enableEdgeBtnLogic();
+    this.enableRunBtnLogic();
+
     this.ui.drawGraph(nodes, edges);
-    this.ui.initTextDescription();
+    this.ui.initTextDescription(this.initText);
     this.ui.drawTable(nodes);
     this.ui.toast({ html: `Graph loaded`, displayLength: 1000 });
+  }
+
+  enableEdgeBtnLogic = () => {
+    if (this.currentGraph.nodes.length >= 2) {
+      this.ui.toggleButtons([document.querySelector(this.ui.selectors.addEdgeBtn)], true);
+    } else {
+      // if num_nodes is 0 or 1, we can't add an edge
+      this.ui.toggleButtons([document.querySelector(this.ui.selectors.addEdgeBtn)], false);
+    }
+  }
+
+  enableDeleteBtnLogic = () => {
+    if (this.currentGraph.nodes.length >= 1) {
+      this.ui.toggleButtons([document.querySelector(this.ui.selectors.deleteBtn)], true);
+    } else {
+      // if num_nodes is 0, get out of DELETE mode
+      this.ui.toggleButtons([document.querySelector(this.ui.selectors.deleteBtn)], false);
+      this.currentState = APP_STATES.NONE;
+    }
+  }
+
+  enableRunBtnLogic = () => {
+    if (this.currentGraph.nodes.length >= 2) {
+      this.ui.toggleButtons([document.querySelector(this.ui.selectors.runBtn)], true);
+    } else {
+      this.ui.toggleButtons([document.querySelector(this.ui.selectors.runBtn)], false);
+    }
   }
 
   numberInputKeydown = (e) => {
@@ -487,10 +548,11 @@ class App {
     const contains = (stringValue, charValue) => {
       return stringValue.indexOf(charValue) > -1;
     }
-    let invalidKey = 
+    let invalidKey =
       e.key.length === 1 && !contains(allowedChars, e.key) ||
       e.key === '.' && contains(e.target.value, '.');
-      invalidKey && e.preventDefault();
+
+    invalidKey && e.preventDefault();
   }
 
   globalKeyDown = (e) => {

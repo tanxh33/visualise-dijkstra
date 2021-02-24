@@ -1,5 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&display=swap');
 
 :root {
   --myMid: #ccc;
@@ -38,13 +38,17 @@ body {
 
 p,
 .graph-table {
-  font-family: 'Roboto', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Noto Sans', 'Roboto Condensed', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 nav {
   position: sticky;
   top: 0;
   z-index: 1;
+}
+
+.strong {
+  font-weight: 700;
 }
 
 .nav-wrapper {
@@ -94,6 +98,7 @@ input[type="range"] + .thumb {
 
 .modal {
   max-width: 400px;
+  will-change: unset;
 }
 
 .modal-content h4 {
@@ -112,7 +117,25 @@ input[type="range"] + .thumb {
   display: none;
 }
 
-#info-modal {
+#predict-tips-modal .tips-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+}
+
+#predict-tips-modal .tips-grid img {
+  border-radius: 4px;
+  border: 2px solid var(--myMid);
+  max-width: 100%;
+}
+
+#predict-tips-modal .tips-grid p {
+  padding: 0 0.5rem;
+  font-size: 14px;
+}
+
+#info-modal,
+#predict-tips-modal {
   max-width: 700px;
 }
 
@@ -260,7 +283,7 @@ span.neighbour-node {
   color: var(--mySecondary);
 }
 span.special-node {
-  color: var(--mySpecialDark)
+  color: var(--mySpecial)
 }
 
 tr.current-node {

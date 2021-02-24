@@ -1121,5 +1121,98 @@ const EXAMPLE_GRAPHS = [
         "weight": 7
       }
     ]
+  },
+  {
+    "nodes": [
+      {
+        "id": 0,
+        "label": "A",
+        "x": 2,
+        "y": 3
+      },
+      {
+        "id": 1,
+        "label": "B",
+        "x": 6,
+        "y": 7
+      },
+      {
+        "id": 2,
+        "label": "C",
+        "x": 3,
+        "y": 12
+      },
+      {
+        "id": 3,
+        "label": "D",
+        "x": 10,
+        "y": 2
+      },
+      {
+        "id": 4,
+        "label": "E",
+        "x": 10,
+        "y": 10
+      },
+      {
+        "id": 5,
+        "label": "F",
+        "x": 15,
+        "y": 5
+      },
+      {
+        "id": 6,
+        "label": "G",
+        "x": 14,
+        "y": 9
+      }
+    ],
+    "edges": [
+      {
+        "start": 0,
+        "end": 1,
+        "weight": 2
+      },
+      {
+        "start": 2,
+        "end": 1,
+        "weight": 3
+      },
+      {
+        "start": 1,
+        "end": 4,
+        "weight": 2
+      },
+      {
+        "start": 1,
+        "end": 5,
+        "weight": 1
+      },
+      {
+        "start": 0,
+        "end": 3,
+        "weight": 3
+      },
+      {
+        "start": 3,
+        "end": 6,
+        "weight": 1
+      },
+      {
+        "start": 3,
+        "end": 5,
+        "weight": 4
+      },
+      {
+        "start": 4,
+        "end": 5,
+        "weight": 3
+      },
+      {
+        "start": 6,
+        "end": 5,
+        "weight": 7
+      }
+    ]
   }
 ];

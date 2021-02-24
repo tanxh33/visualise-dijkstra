@@ -1,5 +1,8 @@
-// Code referenced from: Maiko Miyazaki
-// Link: https://dev.to/maikomiyazaki/completed-javascript-data-structure-course-and-here-is-what-i-learned-about-graph-dijkstra-algorithm-57n8
+// Code implemented with reference from:
+// Article by Maiko Miyazaki:
+//     Completed JavaScript Data Structure Course, and Here is What I Learned About Graph (+ Dijkstra Algorithm)
+// Article link:
+//     https://dev.to/maikomiyazaki/completed-javascript-data-structure-course-and-here-is-what-i-learned-about-graph-dijkstra-algorithm-57n8
 
 class WeightedGraph {
   constructor() {

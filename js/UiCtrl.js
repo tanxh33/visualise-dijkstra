@@ -2,15 +2,21 @@ class UICtrl {
   constructor() {
     this.selectors = {
       addNodeBtn: '#add-node-btn',
+      addNodeModal: '#add-node-modal',
+      addNodeLabel: '#add-node-label',
       addNodeSubmitBtn: '#add-node-submit-btn',
       addEdgeBtn: '#add-edge-btn',
+      addEdgeModal: '#add-edge-modal',
       addEdgeWeightInput: '#add-edge-weight',
       addEdgeSubmitBtn: '#add-edge-submit-btn',
       deleteBtn: '#delete-btn',
 
       runBtn: '#run-btn',
       runStartBtn: '#run-start-btn',
+      runAlgoModal: '#run-algo-modal',
       runAlgoGuess: '#run-algo-guess',
+      predictTipsModal: '#predict-tips-modal',
+      dontShowTipsAgain: '#dont-show-tips-again',
       prevBtn: '#prev-btn',
       nextBtn: '#next-btn',
       skipBtn: '#skip-btn',
@@ -20,6 +26,7 @@ class UICtrl {
       refreshBtn: '#refresh-btn',
       loadExBtn: '#load-ex-btn',
       infoBtn: '#info-btn',
+      infoModal: '#info-modal',
 
       algoOutputContent: '#algo-output-content',
       graphTable: '#graph-table'
@@ -51,12 +58,13 @@ class UICtrl {
       transitionMovement: 3
     });
 
-    M.Modal.init(document.querySelector('#add-node-modal'), {});
-    M.Modal.init(document.querySelector('#add-edge-modal'), {
+    M.Modal.init(document.querySelector(this.selectors.addNodeModal), {});
+    M.Modal.init(document.querySelector(this.selectors.addEdgeModal), {
       onCloseEnd: this.closeAddEdgeModal
     });
-    M.Modal.init(document.querySelector('#run-algo-modal'), {});
-    M.Modal.init(document.querySelector('#info-modal'), {});
+    M.Modal.init(document.querySelector(this.selectors.runAlgoModal), {});
+    M.Modal.init(document.querySelector(this.selectors.predictTipsModal), {});
+    M.Modal.init(document.querySelector(this.selectors.infoModal), {});
 
     this.createGrid();
     this.hideGrid();
@@ -192,7 +200,7 @@ class UICtrl {
   }
 
   initTextDescription = (html='') => {
-    const algoOutputElem = document.querySelector(this.selectors.algoOutputContent)
+    const algoOutputElem = document.querySelector(this.selectors.algoOutputContent);
     algoOutputElem.innerHTML = html;
   }
 
@@ -219,7 +227,7 @@ class UICtrl {
       case 1:
         return `
           <p>
-            Evaluating the next node with lowest priority value:
+            Evaluating the next node with lowest "priority" value:
             <span class="current-node">${currentLabel} (#${current})</span>
           </p>
         `;
@@ -256,7 +264,7 @@ class UICtrl {
         outStr = `
           <p>Reverse the list, and we have the solution!</p>
           <br />
-          <p>Shortest path result (cost = ${state.bestCost}):</p>
+          <p class="strong">Shortest path result (cost = ${state.bestCost}):</p>
         `;
         app.processedResult.forEach((node, i) => {
           let classname = '';
@@ -270,7 +278,10 @@ class UICtrl {
           outStr += `<p>(#${node.id}) <span class="${classname}">${node.label}</span></p>`;
         });
         if (app.predictionMode) {
-          outStr += `<br/><p>Your predicted path (cost = ${app.predictionCost}):</p>`;
+          outStr += `
+            <br/>
+            <p class="strong">Your predicted path (cost = ${app.predictionCost}):</p>
+          `;
           app.predictionInput.forEach(node => {
             outStr += `<p>(#${node.id}) ${node.label}</p>`;
           });
@@ -284,7 +295,7 @@ class UICtrl {
           </p>
           <br />
           <p>
-            We can't find a shortest path because there is no path. Too bad...
+            We couldn't find a shortest path because there is no path. Too bad...
           </p>
           `;
       default: break;
@@ -502,38 +513,42 @@ class UICtrl {
   }
 
   toggleButtonSet1 = (enable) => {
-    const buttonElements = [
+    // Drawing functions
+    this.toggleButtons([
       document.querySelector(this.selectors.addNodeBtn),
       document.querySelector(this.selectors.addEdgeBtn),
       document.querySelector(this.selectors.deleteBtn),
       document.querySelector(this.selectors.refreshBtn),
       document.querySelector(this.selectors.loadExBtn),
       document.querySelector(this.selectors.infoBtn)
-    ];
-    if (enable) {
-      buttonElements.forEach((button) => {
-        button.classList.remove('disabled');
-      });
-    } else {
-      buttonElements.forEach((button) => {
-        button.classList.add('disabled');
-      });
-    }
+    ], enable);
   }
 
   toggleButtonSet2 = (enable) => {
-    const buttonElements = [
+    // Non-play algo running buttons
+    this.toggleButtons([
       document.querySelector(this.selectors.prevBtn),
       document.querySelector(this.selectors.nextBtn),
       document.querySelector(this.selectors.skipBtn),
       document.querySelector(this.selectors.stopBtn)
-    ];
+    ], enable);
+  }
+
+  toggleButtonSet3 = (enable) => {
+    // Play button and skip button, disabled for the "last step"
+    this.toggleButtons([
+      document.querySelector(this.selectors.runBtn),
+      document.querySelector(this.selectors.skipBtn),
+    ], enable);
+  }
+
+  toggleButtons = (btnElements, enable) => {
     if (enable) {
-      buttonElements.forEach((button) => {
+      btnElements.forEach((button) => {
         button.classList.remove('disabled');
       });
     } else {
-      buttonElements.forEach((button) => {
+      btnElements.forEach((button) => {
         button.classList.add('disabled');
       });
     }
@@ -585,13 +600,14 @@ class UICtrl {
       this.addNodeX = parseInt(e.target.dataset.gridX);
       this.addNodeY = parseInt(e.target.dataset.gridY);
 
-      M.Modal.getInstance(document.querySelector('#add-node-modal')).open();
+      M.Modal.getInstance(document.querySelector(this.selectors.addNodeModal)).open();
+      document.querySelector(this.selectors.addNodeLabel).focus();
       // Remaining code occurs at addNodeSubmitHandler()
     }
   };
 
   addNodeSubmitHandler = () => {
-    const labelInput = document.getElementById('add-node-label');
+    const labelInput = document.querySelector(this.selectors.addNodeLabel);
     const label = labelInput.value.trim();
     if (label === '') return;
     if (app.checkIfNodeExists(label)) return;
@@ -599,7 +615,7 @@ class UICtrl {
     labelInput.value = '';
     M.updateTextFields();
 
-    M.Modal.getInstance(document.querySelector('#add-node-modal')).close();
+    M.Modal.getInstance(document.querySelector(this.selectors.addNodeModal)).close();
     app.addNode(this.addNodeX, this.addNodeY, label);
     this.addNodeX = null;
     this.addNodeY = null;
@@ -654,7 +670,11 @@ class UICtrl {
 
       // Add edge to app data structure, and draw to UI.
       if (!app.checkIfEdgeExists(this.addEdgeStart, this.addEdgeEnd)) {
-        M.Modal.getInstance(document.querySelector('#add-edge-modal')).open();
+        M.Modal.getInstance(document.querySelector(this.selectors.addEdgeModal)).open();
+        document.querySelector(this.selectors.addEdgeWeightInput).focus();
+        const currVal = document.querySelector(this.selectors.addEdgeWeightInput).value;
+        document.querySelector(this.selectors.addEdgeWeightInput).value = '';
+        document.querySelector(this.selectors.addEdgeWeightInput).value = currVal;
         // Remaining code occurs at addEdgeSubmitHandler()
       } else {
         // Reset states:
@@ -670,7 +690,7 @@ class UICtrl {
         app.deleteNode(nodeId);
         return;
       }
-      if (clickedObject.classList.contains('graph-edge')) {
+      else if (clickedObject.classList.contains('graph-edge')) {
         const start = parseInt(clickedObject.dataset.startId);
         const end = parseInt(clickedObject.dataset.endId);
         app.deleteEdge(start, end);
@@ -699,20 +719,16 @@ class UICtrl {
     }  // end if-predicting
   };
 
-  displayPrediction = (nodes, edges) => {
-
-  }
-
   addEdgeSubmitHandler = () => {
     const weightInput = document.getElementById('add-edge-weight');
     const weight = parseInt(weightInput.value);
-    if (weight <= 0) {
+    if (!weight || weight <= 0) {
       return;
     }
     weightInput.value = 1;
     M.updateTextFields();
 
-    M.Modal.getInstance(document.querySelector('#add-edge-modal')).close();
+    M.Modal.getInstance(document.querySelector(this.selectors.addEdgeModal)).close();
 
     // console.log(this.addEdgeStart, this.addEdgeEnd, weight);
     app.addEdge(this.addEdgeStart, this.addEdgeEnd, weight);
