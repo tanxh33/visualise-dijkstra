@@ -60,7 +60,7 @@ class UICtrl {
 
     M.Modal.init(document.querySelector(this.selectors.addNodeModal), {});
     M.Modal.init(document.querySelector(this.selectors.addEdgeModal), {
-      onCloseEnd: this.closeAddEdgeModal
+      onCloseEnd: this.deselectEdge
     });
     M.Modal.init(document.querySelector(this.selectors.runAlgoModal), {});
     M.Modal.init(document.querySelector(this.selectors.predictTipsModal), {});
@@ -663,22 +663,30 @@ class UICtrl {
 
         // If n1 == n2, reset state and exit
         if (this.addEdgeStart === this.addEdgeEnd) {
-          this.closeAddEdgeModal();
+          this.deselectEdge();
           return;
         }
       }
 
+      console.log(this.addEdgeStart, this.addEdgeEnd);
+      console.log('returning: ', app.checkIfEdgeExists(this.addEdgeStart, this.addEdgeEnd));
+
       // Add edge to app data structure, and draw to UI.
       if (!app.checkIfEdgeExists(this.addEdgeStart, this.addEdgeEnd)) {
+        console.log('opening modal');
+        // Open modal:
         M.Modal.getInstance(document.querySelector(this.selectors.addEdgeModal)).open();
-        document.querySelector(this.selectors.addEdgeWeightInput).focus();
-        const currVal = document.querySelector(this.selectors.addEdgeWeightInput).value;
-        document.querySelector(this.selectors.addEdgeWeightInput).value = '';
-        document.querySelector(this.selectors.addEdgeWeightInput).value = currVal;
+        const edgeWeightInput = document.querySelector(this.selectors.addEdgeWeightInput);
+        edgeWeightInput.focus();
+        const currVal = edgeWeightInput.value;
+        edgeWeightInput.value = '';
+        edgeWeightInput.value = currVal;
+        // edgeWeightInput.select();
         // Remaining code occurs at addEdgeSubmitHandler()
       } else {
+        console.log("else");
         // Reset states:
-        this.closeAddEdgeModal();
+        this.deselectEdge();
       }
       return;
     } // end if-edge-edit
@@ -734,7 +742,7 @@ class UICtrl {
     app.addEdge(this.addEdgeStart, this.addEdgeEnd, weight);
   }
 
-  closeAddEdgeModal = () => {
+  deselectEdge = () => {
     document.querySelector(`[data-node-id='${this.addEdgeStart}']`).classList.remove('focus');
     document.querySelector(`[data-node-id='${this.addEdgeEnd}']`).classList.remove('focus');
     this.resetValues();

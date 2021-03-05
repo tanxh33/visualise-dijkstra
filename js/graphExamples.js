@@ -1214,5 +1214,524 @@ const EXAMPLE_GRAPHS = [
         "weight": 7
       }
     ]
+  },
+  {
+    "nodes": [
+      {
+        "id": 0,
+        "label": "Tokyo",
+        "x": 12,
+        "y": 9
+      },
+      {
+        "id": 1,
+        "label": "Shinagawa",
+        "x": 11,
+        "y": 12
+      },
+      {
+        "id": 2,
+        "label": "Osaki",
+        "x": 9,
+        "y": 12
+      },
+      {
+        "id": 3,
+        "label": "Shinjuku",
+        "x": 6,
+        "y": 7
+      },
+      {
+        "id": 4,
+        "label": "Ikebukuro",
+        "x": 7,
+        "y": 4
+      },
+      {
+        "id": 5,
+        "label": "Nippori",
+        "x": 11,
+        "y": 3
+      },
+      {
+        "id": 6,
+        "label": "Ueno",
+        "x": 12,
+        "y": 5
+      },
+      {
+        "id": 7,
+        "label": "Akihabara",
+        "x": 12,
+        "y": 7
+      },
+      {
+        "id": 8,
+        "label": "Ochanomizu",
+        "x": 10,
+        "y": 7
+      },
+      {
+        "id": 9,
+        "label": "Yotsuya",
+        "x": 8,
+        "y": 8
+      },
+      {
+        "id": 10,
+        "label": "Kawasaki",
+        "x": 9,
+        "y": 15
+      },
+      {
+        "id": 11,
+        "label": "Musashi-Kosugi",
+        "x": 7,
+        "y": 14
+      },
+      {
+        "id": 12,
+        "label": "Yokohama",
+        "x": 4,
+        "y": 15
+      },
+      {
+        "id": 13,
+        "label": "Ofuna",
+        "x": 1,
+        "y": 15
+      },
+      {
+        "id": 14,
+        "label": "Nishi-Funabashi",
+        "x": 15,
+        "y": 7
+      },
+      {
+        "id": 15,
+        "label": "Chiba",
+        "x": 16,
+        "y": 10
+      },
+      {
+        "id": 16,
+        "label": "Shim-Matsudo",
+        "x": 15,
+        "y": 2
+      },
+      {
+        "id": 17,
+        "label": "Abiko",
+        "x": 17,
+        "y": 1
+      },
+      {
+        "id": 18,
+        "label": "Narita",
+        "x": 19,
+        "y": 7
+      },
+      {
+        "id": 19,
+        "label": "Sakura",
+        "x": 18,
+        "y": 9
+      },
+      {
+        "id": 20,
+        "label": "Akabane",
+        "x": 8,
+        "y": 2
+      },
+      {
+        "id": 21,
+        "label": "Musashi-Urawa",
+        "x": 6,
+        "y": 1
+      },
+      {
+        "id": 22,
+        "label": "Omiya",
+        "x": 4,
+        "y": 0
+      },
+      {
+        "id": 23,
+        "label": "Takasaki",
+        "x": 0,
+        "y": 0
+      },
+      {
+        "id": 24,
+        "label": "Kawagoe",
+        "x": 2,
+        "y": 1
+      },
+      {
+        "id": 25,
+        "label": "Nishi-Kokubunji",
+        "x": 3,
+        "y": 6
+      },
+      {
+        "id": 26,
+        "label": "Tachikawa",
+        "x": 2,
+        "y": 7
+      },
+      {
+        "id": 27,
+        "label": "Hachioji",
+        "x": 0,
+        "y": 8
+      },
+      {
+        "id": 28,
+        "label": "Haijima",
+        "x": 0,
+        "y": 6
+      },
+      {
+        "id": 29,
+        "label": "Komagawa",
+        "x": 1,
+        "y": 3
+      },
+      {
+        "id": 30,
+        "label": "Hashimoto",
+        "x": 0,
+        "y": 10
+      },
+      {
+        "id": 31,
+        "label": "Fuchuhommachi",
+        "x": 3,
+        "y": 9
+      },
+      {
+        "id": 32,
+        "label": "Soga",
+        "x": 16,
+        "y": 12
+      },
+      {
+        "id": 33,
+        "label": "Kisarazu",
+        "x": 15,
+        "y": 15
+      },
+      {
+        "id": 34,
+        "label": "Oami",
+        "x": 18,
+        "y": 14
+      },
+      {
+        "id": 35,
+        "label": "Naruto",
+        "x": 19,
+        "y": 12
+      },
+      {
+        "id": 36,
+        "label": "Oyama",
+        "x": 8,
+        "y": 0
+      },
+      {
+        "id": 37,
+        "label": "Utsunomiya",
+        "x": 11,
+        "y": 0
+      }
+    ],
+    "edges": [
+      {
+        "start": 0,
+        "end": 1,
+        "weight": 10
+      },
+      {
+        "start": 2,
+        "end": 1,
+        "weight": 3
+      },
+      {
+        "start": 2,
+        "end": 3,
+        "weight": 12
+      },
+      {
+        "start": 3,
+        "end": 4,
+        "weight": 7
+      },
+      {
+        "start": 4,
+        "end": 5,
+        "weight": 13
+      },
+      {
+        "start": 5,
+        "end": 6,
+        "weight": 4
+      },
+      {
+        "start": 6,
+        "end": 7,
+        "weight": 3
+      },
+      {
+        "start": 7,
+        "end": 0,
+        "weight": 4
+      },
+      {
+        "start": 7,
+        "end": 8,
+        "weight": 2
+      },
+      {
+        "start": 0,
+        "end": 8,
+        "weight": 4
+      },
+      {
+        "start": 9,
+        "end": 8,
+        "weight": 5
+      },
+      {
+        "start": 9,
+        "end": 3,
+        "weight": 4
+      },
+      {
+        "start": 1,
+        "end": 10,
+        "weight": 8
+      },
+      {
+        "start": 1,
+        "end": 11,
+        "weight": 10
+      },
+      {
+        "start": 2,
+        "end": 11,
+        "weight": 10
+      },
+      {
+        "start": 11,
+        "end": 12,
+        "weight": 12
+      },
+      {
+        "start": 10,
+        "end": 12,
+        "weight": 8
+      },
+      {
+        "start": 13,
+        "end": 12,
+        "weight": 15
+      },
+      {
+        "start": 7,
+        "end": 14,
+        "weight": 27
+      },
+      {
+        "start": 0,
+        "end": 14,
+        "weight": 30
+      },
+      {
+        "start": 14,
+        "end": 15,
+        "weight": 24
+      },
+      {
+        "start": 15,
+        "end": 19,
+        "weight": 18
+      },
+      {
+        "start": 19,
+        "end": 18,
+        "weight": 13
+      },
+      {
+        "start": 18,
+        "end": 17,
+        "weight": 41
+      },
+      {
+        "start": 17,
+        "end": 16,
+        "weight": 13
+      },
+      {
+        "start": 16,
+        "end": 5,
+        "weight": 27
+      },
+      {
+        "start": 5,
+        "end": 20,
+        "weight": 17
+      },
+      {
+        "start": 4,
+        "end": 20,
+        "weight": 10
+      },
+      {
+        "start": 20,
+        "end": 21,
+        "weight": 10
+      },
+      {
+        "start": 21,
+        "end": 22,
+        "weight": 11
+      },
+      {
+        "start": 21,
+        "end": 16,
+        "weight": 31
+      },
+      {
+        "start": 22,
+        "end": 23,
+        "weight": 72
+      },
+      {
+        "start": 22,
+        "end": 24,
+        "weight": 23
+      },
+      {
+        "start": 3,
+        "end": 25,
+        "weight": 25
+      },
+      {
+        "start": 26,
+        "end": 25,
+        "weight": 5
+      },
+      {
+        "start": 21,
+        "end": 25,
+        "weight": 25
+      },
+      {
+        "start": 27,
+        "end": 26,
+        "weight": 10
+      },
+      {
+        "start": 26,
+        "end": 28,
+        "weight": 11
+      },
+      {
+        "start": 27,
+        "end": 28,
+        "weight": 13
+      },
+      {
+        "start": 29,
+        "end": 28,
+        "weight": 31
+      },
+      {
+        "start": 29,
+        "end": 24,
+        "weight": 18
+      },
+      {
+        "start": 23,
+        "end": 29,
+        "weight": 86
+      },
+      {
+        "start": 27,
+        "end": 30,
+        "weight": 12
+      },
+      {
+        "start": 30,
+        "end": 13,
+        "weight": 73
+      },
+      {
+        "start": 30,
+        "end": 12,
+        "weight": 39
+      },
+      {
+        "start": 26,
+        "end": 31,
+        "weight": 12
+      },
+      {
+        "start": 25,
+        "end": 31,
+        "weight": 5
+      },
+      {
+        "start": 31,
+        "end": 11,
+        "weight": 30
+      },
+      {
+        "start": 16,
+        "end": 14,
+        "weight": 16
+      },
+      {
+        "start": 0,
+        "end": 32,
+        "weight": 42
+      },
+      {
+        "start": 15,
+        "end": 32,
+        "weight": 6
+      },
+      {
+        "start": 32,
+        "end": 33,
+        "weight": 32
+      },
+      {
+        "start": 32,
+        "end": 34,
+        "weight": 18
+      },
+      {
+        "start": 34,
+        "end": 35,
+        "weight": 20
+      },
+      {
+        "start": 19,
+        "end": 35,
+        "weight": 27
+      },
+      {
+        "start": 22,
+        "end": 36,
+        "weight": 48
+      },
+      {
+        "start": 36,
+        "end": 37,
+        "weight": 27
+      }
+    ]
   }
 ];

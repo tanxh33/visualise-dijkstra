@@ -146,19 +146,22 @@ class App {
   }
 
   checkIfEdgeExists = (start, end) => {
-    // Check that an edge with same start and end doesn't 
-    // already exist in the currentGraph.
-    this.currentGraph.edges.forEach((edge) => {
+    // Check that an edge with same start and end doesn't already exist in the currentGraph.
+    let exists = false;
+    for (let i = 0; i < this.currentGraph.edges.length; i++) {
+      const edge = this.currentGraph.edges[i];
       if (
         (start === edge.start && end === edge.end) ||
         (start === edge.end && end === edge.start)
       ) {
         // [TODO] Here we exit if it exists, but maybe instead just update the weight value.
         // console.log('edge alr exists');
-        return true;
+        exists = true;
       }
-    });
-    return false;
+      if (exists) break;
+    }
+    // console.log('edge doesnt exist');
+    return exists;
   }
 
   addEdge = (start, end, weight) => {

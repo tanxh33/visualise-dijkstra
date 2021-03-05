@@ -231,7 +231,7 @@ class DijkstraCustom {
           this.pushStateToSteps({ flag: 7, result: JSON.parse(JSON.stringify(this.result)) });
           this.current = this.prevVisited[this.current];
         }
-        this.result = this.result.concat(this.current);
+        this.result.push(this.current);
         this.pushStateToSteps({ flag: 7, result: JSON.parse(JSON.stringify(this.result)) });
         this.result = this.result.reverse();
         break;

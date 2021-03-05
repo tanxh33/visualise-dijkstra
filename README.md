@@ -2,7 +2,7 @@
 
 A web application for a school project - Development of a Software Application for Teaching Computer Networking.
 
-Work in progress.
+[Try it out here](https://tanxh33.github.io/visualise-dijkstra/).
 
 Built in JavaScript, with [MaterializeCSS](https://materializecss.com/).
 
