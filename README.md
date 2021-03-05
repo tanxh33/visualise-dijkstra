@@ -1,4 +1,4 @@
-# Visualisation of Dijkstra's Shortest Path Algorithm  <img src="./logo.svg" height="36">
+# Visualisation of Dijkstra's Shortest Path Algorithm  <img src="./img/logo.svg" height="36">
 
 A web application for a school project - Development of a Software Application for Teaching Computer Networking.
 
