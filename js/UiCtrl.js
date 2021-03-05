@@ -678,10 +678,10 @@ class UICtrl {
         M.Modal.getInstance(document.querySelector(this.selectors.addEdgeModal)).open();
         const edgeWeightInput = document.querySelector(this.selectors.addEdgeWeightInput);
         edgeWeightInput.focus();
-        const currVal = edgeWeightInput.value;
-        edgeWeightInput.value = '';
-        edgeWeightInput.value = currVal;
-        // edgeWeightInput.select();
+        // const currVal = edgeWeightInput.value;
+        // edgeWeightInput.value = '';
+        // edgeWeightInput.value = currVal;
+        edgeWeightInput.select();
         // Remaining code occurs at addEdgeSubmitHandler()
       } else {
         console.log("else");
