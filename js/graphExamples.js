@@ -54,7 +54,6 @@ const EXAMPLE_GRAPHS = [
         label: 'I',
         x: 9,
         y: 7,
-        // focus: true
       }
     ],
     edges: [
@@ -72,7 +71,6 @@ const EXAMPLE_GRAPHS = [
         start: 1,
         end: 2,
         weight: 8,
-        // focus: true
       },
       {
         start: 1,

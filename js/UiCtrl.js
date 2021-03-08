@@ -98,7 +98,7 @@ class UICtrl {
     const circle = document.createElementNS(svgns, 'circle');
     const text = document.createElementNS(svgns, 'text');
 
-    const { id, label, x, y, focus } = node;
+    const { id, label, x, y } = node;
     const [x_pos, y_pos] = this.getGridPos(y, x);
 
     circle.setAttributeNS(null, 'cx', x_pos);
@@ -111,7 +111,7 @@ class UICtrl {
     text.innerHTML = label;
 
     nodeGroup.classList.add('graph-node');
-    if (focus) nodeGroup.classList.add('focus');
+    // if (focus) nodeGroup.classList.add('focus');
     nodeGroup.appendChild(circle);
     nodeGroup.appendChild(text);
     nodeGroup.dataset.nodeId = id;
@@ -128,7 +128,7 @@ class UICtrl {
     const [x1, y1] = this.getGridPos(start.y, start.x);
     const [x2, y2] = this.getGridPos(end.y, end.x);
     const weight = edge.weight;
-    const focus = edge.focus;
+    // const focus = edge.focus;
 
     line.setAttributeNS(null, 'x1', x1);
     line.setAttributeNS(null, 'y1', y1);
@@ -142,7 +142,7 @@ class UICtrl {
     text.innerHTML = weight;
 
     edgeGroup.classList.add('graph-edge');
-    if (focus) edgeGroup.classList.add('focus');
+    // if (focus) edgeGroup.classList.add('focus');
     edgeGroup.appendChild(line);
     edgeGroup.appendChild(text);
     edgeGroup.dataset.startId = start.id;
@@ -668,12 +668,8 @@ class UICtrl {
         }
       }
 
-      console.log(this.addEdgeStart, this.addEdgeEnd);
-      console.log('returning: ', app.checkIfEdgeExists(this.addEdgeStart, this.addEdgeEnd));
-
       // Add edge to app data structure, and draw to UI.
       if (!app.checkIfEdgeExists(this.addEdgeStart, this.addEdgeEnd)) {
-        console.log('opening modal');
         // Open modal:
         M.Modal.getInstance(document.querySelector(this.selectors.addEdgeModal)).open();
         const edgeWeightInput = document.querySelector(this.selectors.addEdgeWeightInput);
@@ -684,7 +680,6 @@ class UICtrl {
         edgeWeightInput.select();
         // Remaining code occurs at addEdgeSubmitHandler()
       } else {
-        console.log("else");
         // Reset states:
         this.deselectEdge();
       }
