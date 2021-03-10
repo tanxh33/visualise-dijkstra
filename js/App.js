@@ -71,7 +71,6 @@ class App {
   init = () => {
     this.currentState = APP_STATES.NONE;
     this.currentGraph = { nodes: [], edges: [] };
-    this.resetAutorun(document.querySelector(this.ui.selectors.autorunSlider).value);
     this.graph.resetGraph();
     this.enableEdgeBtnLogic();
     this.enableDeleteBtnLogic();
@@ -80,6 +79,8 @@ class App {
     this.ui.toggleButtonSet2(false);
     this.ui.drawTable([]);
     this.ui.initTextDescription(this.initText);
+    this.resetAutorun(document.querySelector(this.ui.selectors.autorunSlider).value);
+    this.showTips = !document.querySelector(this.ui.selectors.dontShowTipsAgain).checked;
   }
 
   refresh = () => {
