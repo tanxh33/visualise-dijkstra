@@ -17,11 +17,11 @@
   --mySpecialDark: #2b8546;
   --mySpecialLight: #e0eec9;
 
-  --maxWidth: 1500px;
+  --maxWidth: 1600px;
 }
 
 html {
-  font-size: 16px;
+  font-size: 14px;
   font-family: 'Roboto Condensed', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
@@ -34,6 +34,11 @@ html {
 body {
   background: #c8d9e7;
   overflow-x: hidden; /* Hide horizontal scrollbar */
+}
+
+p {
+  font-size: 12px;
+  margin-bottom: 0.25rem;
 }
 
 p,
@@ -96,6 +101,7 @@ input[type="range"] + .thumb {
   display: none;
 }
 
+/* Modals */
 .modal {
   max-width: 400px;
   will-change: unset;
@@ -106,7 +112,7 @@ input[type="range"] + .thumb {
 }
 
 #run-algo-modal .modal-content {
-  min-height: 500px;
+  min-height: 400px;
 }
 
 #run-algo-modal .helper-text {
@@ -131,18 +137,20 @@ input[type="range"] + .thumb {
 
 #predict-tips-modal .tips-grid p {
   padding: 0 0.5rem;
-  font-size: 14px;
 }
 
-#info-modal,
-#predict-tips-modal {
-  max-width: 700px;
+#info-modal {
+  max-width: 600px;
 }
 
 #info-modal h4,
 #info-modal p {
   position: relative;
   z-index: 10;
+}
+
+#info-modal .modal-footer .btn {
+  z-index: 7;
 }
 
 #logo-svg {
@@ -156,10 +164,6 @@ input[type="range"] + .thumb {
   z-index: 5;
 }
 
-#info-modal .modal-footer .btn {
-  z-index: 7;
-}
-
 .modal .input-field input[type=text]:focus + label,
 .modal .input-field input[type=number]:focus + label {
   color: var(--myPrimary);
@@ -171,6 +175,7 @@ input[type="range"] + .thumb {
   box-shadow: 0 1px 0 0 var(--myPrimary);
 }
 
+/* SVG Graph */
 .graph-edge text,
 .graph-node text {
   fill: #fff;
@@ -179,13 +184,13 @@ input[type="range"] + .thumb {
 
 .graph-edge text {
   stroke-width: 1.2px;
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 700;
 }
 
 .graph-node text {
-  stroke-width: 1px;
-  font-size: 14px;
+  stroke-width: 0.75px;
+  font-size: 16px;
   font-weight: 700;
 }
 
@@ -208,7 +213,7 @@ input[type="range"] + .thumb {
 .graph-node.focus *,
 .graph-edge.focus * {
   stroke: var(--mySecondary);
-  stroke-width: 1.3px;
+  stroke-width: 1.4px;
 }
 
 .grid-circle:hover,
@@ -223,13 +228,14 @@ input[type="range"] + .thumb {
   overflow-y: auto !important;
 }
 
+/* Body content */
 #outer-container {
   margin: auto;
   padding: 1rem;
   min-height: 88vh;
   max-width: var(--maxWidth);
   display: grid;
-  grid-template-columns: 3fr 2fr;
+  grid-template-columns: 2fr 1fr 1fr;
   gap: 1rem;
   align-items: start;
   justify-content: start;
@@ -239,13 +245,9 @@ input[type="range"] + .thumb {
   width: 100%;
 }
 
-#canvas-container {
-  grid-column: 1 / 2;
-}
-
 #canvas {
   max-height: 600px;
-  background: #fff;
+  background: #fafafa;
 }
 
 #algo-output-content {
@@ -258,17 +260,12 @@ input[type="range"] + .thumb {
   margin-top: 0;
 }
 
-#table-container {
-  grid-column: 2 / 3;
-}
-
 #table-container tbody {
-  font-size: 14px;
+  font-size: 12px;
 }
 
 .graph-table {
   margin: auto;
-  max-width: 90%;
 }
 
 .graph-table th,
@@ -315,7 +312,7 @@ tr.neighbour-node {
   height: 2rem;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1100px) {
   nav {
     height: 42px;
     line-height: 42px;
@@ -337,31 +334,31 @@ tr.neighbour-node {
   }
 
   #outer-container {
-    grid-template-columns: 1fr;
-    /* grid-template-rows: none; */
+    grid-template-columns: 1fr 1fr;
   }
 
   #canvas-container {
-    grid-column: 1 / 1;
+    grid-column: 1 / 2;
+  }
+
+  #algo-output-content {
+    grid-column: 2 / 3;
+  }
+
+  #table-container {
+    grid-column: 2 / 3;
   }
 
   #canvas {
     position: relative;
     left: 50%;
     -webkit-transform: translateX(-50%);
-    -ms-transform: translateX(-50%);
-    transform: translateX(-50%);
-  }
-  #algo-output-content {
-    margin: auto;
-    width: 90%;
-  }
-  #table-container {
-    grid-column: 1 / 1;
+        -ms-transform: translateX(-50%);
+            transform: translateX(-50%);
   }
 }
 
-@media (max-width: 720px) {
+@media (max-width: 900px) {
   nav {
     height: 36px;
     line-height: 36px;
@@ -385,7 +382,21 @@ tr.neighbour-node {
     width: 80px;
     height: 8px;
   }
+
+  #outer-container {
+    grid-template-columns: 1fr;
+    max-width: 600px;
+  }
+
+  #algo-output-content {
+    grid-column: 1 / 2;
+  }
+
+  #table-container {
+    grid-column: 1 / 2;
+  }
 }
+
 @media (max-width: 560px) {
   #autorun-slider {
     display: none;

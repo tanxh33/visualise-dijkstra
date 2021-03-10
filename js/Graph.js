@@ -218,9 +218,11 @@ class DijkstraCustom {
   run = () => {
     while (this.checkList.values.length) {
 
-      this.current = this.checkList.dequeue().val;
+      this.current = this.checkList.values[0].val;  // Read the value first to keep 'priority' in state
 
       this.pushStateToSteps({ flag: 1 });
+
+      this.checkList.dequeue();  // Dequeue afterwards
 
       if (this.current === this.finish) {
         // Solution found

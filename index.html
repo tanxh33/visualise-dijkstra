@@ -227,8 +227,8 @@
           <img src="./img/tips-1.png" alt="" />
           <img src="./img/tips-2.png" alt="" />
           <img src="./img/tips-3.png" alt="" />
-          <p>Click on a <span class="strong">neighbouring node</span> to add to your predicted path</p>
-          <p>Click on the <span class="strong">source node</span> to remove it from your predicted path</p>
+          <p>Click on a <span class="strong neighbour-node">neighbouring node</span> to add to your predicted path</p>
+          <p>Click on the <span class="strong current-node">source node</span> to remove it from your predicted path</p>
           <p>Click the <span class="strong">run button</span> again when you're done to run the algorithm</p>
       </div>
       <div class="input-field">
@@ -276,8 +276,9 @@
     <!-- SVG Canvas -->
     <div id="canvas-container">
       <svg id="canvas" viewBox="0 0 850 600"></svg>
-      <div id="algo-output-content"></div>
     </div>
+
+    <div id="algo-output-content"></div>
 
     <div id="table-container">
       <table id="graph-table" class="graph-table highlight">

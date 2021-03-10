@@ -355,8 +355,8 @@ class App {
       <h5>From ${this.algoStart.label} to ${this.algoEnd.label}</h5>
       <p class="strong">Predict the shortest path:</p>
       <p>Compare your human intuition to the algorithm's result!</p><br />
-      <p>Click on a <span class="strong">neighbouring node</span> to add to your predicted path.</p>
-      <p>Click on the <span class="strong">source node</span> to remove it from your predicted path.</p>
+      <p>Click on a <span class="strong neighbour-node">neighbouring node</span> to add to your predicted path.</p>
+      <p>Click on the <span class="strong current-node">source node</span> to remove it from your predicted path.</p>
       <p>Click on the <span class="strong">run button</span> again to run the algorithm.</p><br />
       <p class="strong">Selected path (cost = ${this.predictionCost}):</p>
     ` + predStr);

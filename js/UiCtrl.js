@@ -222,7 +222,6 @@ class UICtrl {
         return `
           <p>Initialised lists.</p>
           <p>Costs for all nodes initialised as Infinity.</p>
-
         `;
       case 1:
         return `
@@ -310,10 +309,10 @@ class UICtrl {
       <br />
       <p>Loop through the neighbouring nodes of the current node and evaluate their cost.</p>
       <br />
-      <p>Neighbour node:
+      <p>1. Neighbour node:
         <span class="neighbour-node">${neighbourLabel} (#${state.neighbour})</span>
       </p>
-      <p>Cost from start (${app.algoStart.label}) to 
+      <p>2. Cost from start (${app.algoStart.label}) to 
         <span class="current-node">${currentLabel}</span> to
         <span class="neighbour-node">${neighbourLabel}</span>
         = ${state.costToNeighbour}
@@ -325,7 +324,7 @@ class UICtrl {
       case 3:
         outStr += `
           <p>
-            Cost from start (${app.algoStart.label}) to
+            3. Cost from start (${app.algoStart.label}) to
             <span class="neighbour-node">${neighbourLabel}</span>
             = ${costFromStartTo[state.neighbour] || Infinity}
           </p>
@@ -341,13 +340,13 @@ class UICtrl {
           <br />
           <p>
             Updated information for
-            <span class="neighbour-node">${neighbourLabel}</span>.
+            <span class="neighbour-node">${neighbourLabel}</span> in the table.
           </p>`;
         break;
       case 5:
         outStr += `
           <p>
-            Cost from start (${app.algoStart.label}) to
+            3. Cost from start (${app.algoStart.label}) to
             <span class="neighbour-node">${neighbourLabel}</span>
             = ${costFromStartTo[state.neighbour]}
           </p>
