@@ -301,6 +301,8 @@ class UICtrl {
     }
 
     const neighbourLabel = state.neighbour ? this.getLabelOfNodeFromId(nodes, state.neighbour): null;
+    const isNeighbourSameAsStart = parseInt(current) === app.algoStart.id;
+    const costFromStartToNeighbourNode = costFromStartTo[state.neighbour] === null ? Infinity : costFromStartTo[state.neighbour];
 
     outStr = `
       <p>Current node:
@@ -313,10 +315,21 @@ class UICtrl {
         <span class="neighbour-node">${neighbourLabel} (#${state.neighbour})</span>
       </p>
       <p>2. Cost from start (${app.algoStart.label}) to 
-        <span class="current-node">${currentLabel}</span> to
+        ${isNeighbourSameAsStart ? '' :
+          `<span class="current-node">${currentLabel}</span> to`
+        }
         <span class="neighbour-node">${neighbourLabel}</span>
         = ${state.costToNeighbour}
       </p>
+      ${isNeighbourSameAsStart ? '' :
+      `<p>
+        3. Cost from start (${app.algoStart.label}) to
+        <span class="neighbour-node">${neighbourLabel}</span>
+        = ${costFromStartToNeighbourNode}
+        ${state.flag === 4 ? '<span class="neighbour-node">(updated)</span>' : ''}
+        </p>`
+      }
+      <br />
     `;
 
     switch (state.flag) {
@@ -324,20 +337,13 @@ class UICtrl {
       case 3:
         outStr += `
           <p>
-            3. Cost from start (${app.algoStart.label}) to
-            <span class="neighbour-node">${neighbourLabel}</span>
-            = ${costFromStartTo[state.neighbour] || Infinity}
-          </p>
-          <br />
-          <p>
-            Since ${state.costToNeighbour} < ${costFromStartTo[state.neighbour] || Infinity}, we should update the information for
+            Since ${state.costToNeighbour} < ${costFromStartToNeighbourNode}, we should update the information for
             <span class="neighbour-node">${neighbourLabel}</span>.
           </p>
           `;
         break;
       case 4:
         outStr += `
-          <br />
           <p>
             Updated information for
             <span class="neighbour-node">${neighbourLabel}</span> in the table.
@@ -346,13 +352,7 @@ class UICtrl {
       case 5:
         outStr += `
           <p>
-            3. Cost from start (${app.algoStart.label}) to
-            <span class="neighbour-node">${neighbourLabel}</span>
-            = ${costFromStartTo[state.neighbour]}
-          </p>
-          <br />
-          <p>
-            Since ${state.costToNeighbour} is not < ${costFromStartTo[state.neighbour]}, we don't update the lists.
+            Since ${state.costToNeighbour} is not < ${costFromStartToNeighbourNode}, we don't update the lists.
           </p>
         `;
         break;
