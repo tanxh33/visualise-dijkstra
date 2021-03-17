@@ -23,9 +23,16 @@ class App {
     this.initText = `
       <h5>Visualising Dijkstra's Algorithm</h5>
       <p>This is a tool for learners to understand Dijkstra's shortest path algorithm.</p><br />
+      <h6>How to Use</h6>
       <p><span class="strong">Make your own graph</span> by adding nodes and edges with the buttons on the top left.</p>
-      <p><span class="strong">Run the algorithm</span> to find the shortest path between two nodes.</p><br />
-      <p>You can also try loading some pre-made graphs with the 'Load Example' button.</p>
+      <p><span class="strong">Run the algorithm</span> to find the shortest path between two nodes.</p>
+      <p>You can also try loading some pre-made graphs with the 'Load Example' button.</p><br />
+      <h6>About</h6>
+      <p>Dijkstra's algorithm finds the shortest path between two given nodes in a graph, which can represent road networks or computer network architectures.</p><br />
+      <p>
+        This tool does not support directed graphs, although the algorithm works on both directed and undirected graphs. The generic algorithm does not work on negative weight values.
+        <a href="https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm" target="_blank">Wikipedia</a>
+      </p><br />
     `;
 
     document.addEventListener('DOMContentLoaded', () => {
