@@ -24,9 +24,11 @@ class App {
       <h5>Visualising Dijkstra's Algorithm</h5>
       <p>This is a tool for learners to understand Dijkstra's shortest path algorithm.</p><br />
       <h6>How to Use</h6>
-      <p><span class="strong">Make your own graph</span> by adding nodes and edges with the buttons on the top left.</p>
-      <p><span class="strong">Run the algorithm</span> to find the shortest path between two nodes.</p>
-      <p>You can also try loading some pre-made graphs with the 'Load Example' button.</p><br />
+      <p>- <span class="strong">Make your own graph</span> by adding nodes and edges with the buttons on the top left.</p>
+      <p>- <span class="strong">Run the algorithm</span> to find the shortest path between two nodes.</p>
+      <p>- <span class="strong">Watch and learn</span> as the algorithm finds the solution step-by-step.</p>
+      <p>- <span class="strong">Adjust the step or speed</span> with the control buttons.</p>
+      <p>- Try out some pre-made graphs with the <span class="strong">'Load Example'</span> button.</p><br />  
       <h6>About</h6>
       <p>Dijkstra's algorithm finds the shortest path between two given nodes in a graph, which can represent road networks or computer network architectures.</p><br />
       <p>
